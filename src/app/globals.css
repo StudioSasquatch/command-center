@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Core palette - Blade Runner meets NASA */
+  --void: #05050a;
+  --deep: #0a0b12;
+  --surface: #0f1118;
+  --elevated: #161822;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-glow: rgba(255, 107, 53, 0.15);
+  
+  /* Text hierarchy */
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888a0;
+  --text-muted: #4a4a60;
+  
+  /* Signature accents - bold, not timid */
+  --ember: #ff5722;
+  --ember-glow: rgba(255, 87, 34, 0.6);
+  --plasma: #00e5ff;
+  --plasma-glow: rgba(0, 229, 255, 0.5);
+  --nova: #bf5af2;
+  --nova-glow: rgba(191, 90, 242, 0.5);
+  --matrix: #30d158;
+  --matrix-glow: rgba(48, 209, 88, 0.5);
+  --warning: #ffd60a;
+  
+  /* Gradients */
+  --gradient-ember: linear-gradient(135deg, #ff5722 0%, #ff9100 100%);
+  --gradient-plasma: linear-gradient(135deg, #00e5ff 0%, #2979ff 100%);
+  --gradient-nova: linear-gradient(135deg, #bf5af2 0%, #5e5ce6 100%);
+  --gradient-void: radial-gradient(ellipse at top, #161822 0%, #05050a 70%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--void);
+  color: var(--text-primary);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Dramatic background with depth */
+.scene-bg {
+  position: fixed;
+  inset: 0;
+  background: var(--gradient-void);
+  z-index: -2;
+}
+
+.scene-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse 800px 600px at 20% 20%, rgba(255, 87, 34, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 600px 400px at 80% 30%, rgba(0, 229, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 400px 300px at 60% 80%, rgba(191, 90, 242, 0.05) 0%, transparent 50%);
+  z-index: -1;
+}
+
+/* Animated grid overlay */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
+  z-index: -1;
+  animation: grid-drift 30s linear infinite;
+}
+
+@keyframes grid-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 80px 80px; }
+}
+
+/* Typography - Orbitron for display, Syne for UI, JetBrains for data */
+.font-display {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Glass cards with depth */
+.glass-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(15, 17, 24, 0.9) 0%,
+    rgba(10, 11, 18, 0.95) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* Glow variants */
+.glow-ember {
+  box-shadow: 
+    0 0 0 1px rgba(255, 87, 34, 0.2),
+    0 4px 30px rgba(255, 87, 34, 0.15),
+    inset 0 1px 0 rgba(255, 87, 34, 0.1);
+}
+
+.glow-plasma {
+  box-shadow: 
+    0 0 0 1px rgba(0, 229, 255, 0.2),
+    0 4px 30px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+}
+
+.glow-nova {
+  box-shadow: 
+    0 0 0 1px rgba(191, 90, 242, 0.2),
+    0 4px 30px rgba(191, 90, 242, 0.15),
+    inset 0 1px 0 rgba(191, 90, 242, 0.1);
+}
+
+/* Status indicators with pulse */
+.status-beacon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-beacon::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  animation: beacon-pulse 2s ease-out infinite;
+}
+
+.status-active {
+  background: var(--matrix);
+  box-shadow: 0 0 12px var(--matrix-glow);
+}
+.status-active::after {
+  border: 2px solid var(--matrix);
+}
+
+.status-pending {
+  background: var(--warning);
+  box-shadow: 0 0 12px rgba(255, 214, 10, 0.5);
+}
+.status-pending::after {
+  border: 2px solid var(--warning);
+}
+
+.status-critical {
+  background: var(--ember);
+  box-shadow: 0 0 12px var(--ember-glow);
+}
+.status-critical::after {
+  border: 2px solid var(--ember);
+}
+
+@keyframes beacon-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Progress bars with glow */
+.progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  position: relative;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  filter: blur(8px);
+  background: inherit;
+}
+
+/* Dramatic dividers */
+.divider-glow {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.1) 20%, 
+    rgba(255, 87, 34, 0.3) 50%, 
+    rgba(255, 255, 255, 0.1) 80%, 
+    transparent 100%
+  );
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Scanline effect for extra sci-fi feel */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 100;
+}
