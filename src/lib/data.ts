@@ -2,7 +2,7 @@ import { Project, Activity } from '@/types';
 
 // ============================================
 // PROJECT DATA - Noctis updates this file
-// Last updated: 2025-06-25
+// Last updated: 2025-06-25 @ 11:55 PM PST
 // ============================================
 
 export const projects: Project[] = [
@@ -130,6 +130,13 @@ export const lifeProjects: Project[] = [
 // ============================================
 
 export const recentActivity: Activity[] = [
+  {
+    id: '0',
+    timestamp: new Date('2025-06-25T23:55:00'),
+    project: 'Command Center',
+    action: 'Data sync system activated - Noctis can now push updates',
+    type: 'milestone',
+  },
   {
     id: '1',
     timestamp: new Date('2025-06-25T19:50:00'),
