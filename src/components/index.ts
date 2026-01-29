@@ -3,3 +3,4 @@ export { QuickStats } from './QuickStats';
 export { ProjectCard } from './ProjectCard';
 export { ActivityFeed } from './ActivityFeed';
 export { InboxCapture } from './InboxCapture';
+export { CalendarWidget } from './CalendarWidget';

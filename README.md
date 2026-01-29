@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Command Center
 
-## Getting Started
+**Kirby Holdings Mission Control**
 
-First, run the development server:
+Live at: https://hq.kirbyholdings.ltd
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Overview
+
+A cinematic dashboard for tracking all of Jeremy's ventures, projects, and life priorities. Built by Noctis Aurelius.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS + Custom CSS
+- **Animations**: Framer Motion
+- **Fonts**: Orbitron (display), Syne (UI), JetBrains Mono (data)
+- **Hosting**: Vercel
+- **Domain**: hq.kirbyholdings.ltd
+
+## Architecture
+
+### Data Flow
+
+```
+Jeremy briefs Noctis
+        ↓
+Noctis updates src/lib/data.ts
+        ↓
+Git commit + Vercel deploy
+        ↓
+Dashboard reflects changes (~30s)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### File Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── inbox/      # Inbox capture API
+│   │   └── projects/   # Projects API
+│   ├── project/[id]/   # Project detail pages
+│   ├── globals.css     # Theme and styles
+│   ├── layout.tsx      # Root layout + PWA config
+│   └── page.tsx        # Main dashboard
+├── components/
+│   ├── Header.tsx
+│   ├── QuickStats.tsx
+│   ├── ProjectCard.tsx
+│   ├── ActivityFeed.tsx
+│   ├── CalendarWidget.tsx
+│   └── InboxCapture.tsx
+├── lib/
+│   ├── data.ts         # ← NOCTIS UPDATES THIS
+│   └── notify.ts       # Notification templates
+└── types/
+    └── index.ts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data File (src/lib/data.ts)
 
-## Learn More
+This is the single source of truth. Noctis updates this file when Jeremy provides briefings.
 
-To learn more about Next.js, take a look at the following resources:
+### Sections
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `projects` - Active ventures with status, progress, metrics
+- `lifeProjects` - Protected personal time (golf, cards, gaming)
+- `recentActivity` - Activity feed entries
+- `quickStats` - Dashboard header stats
+- `inboxItems` - Pending items to process
+- `calendarEvents` - Upcoming events (synced from Google Calendar)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+### Manual Deploy
+```bash
+cd command-center
+vercel --prod
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Auto Deploy (GitHub)
+Push to main branch → Vercel auto-deploys
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## PWA
+
+The dashboard is installable as a Progressive Web App:
+
+1. Open https://hq.kirbyholdings.ltd on mobile
+2. Tap "Add to Home Screen"
+3. Access like a native app
+
+## Future Enhancements
+
+- [ ] Real-time sync via WebSocket
+- [ ] Google Calendar integration (gog CLI)
+- [ ] Telegram bot for quick updates
+- [ ] Voice briefings via Noctis
+
+---
+
+Built with 🏛️ by Noctis Aurelius

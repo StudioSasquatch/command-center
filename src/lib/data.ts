@@ -202,3 +202,30 @@ export const inboxItems: string[] = [
   // Add items here as they come in
   // Format: "[timestamp] item text"
 ];
+
+// ============================================
+// CALENDAR - Upcoming events
+// Noctis syncs from Google Calendar via gog CLI
+// ============================================
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  location?: string;
+  type: 'meeting' | 'personal' | 'deadline' | 'golf';
+}
+
+export const calendarEvents: CalendarEvent[] = [
+  // Events will be populated here
+  // Example:
+  // {
+  //   id: '1',
+  //   title: 'Team Sync',
+  //   start: new Date('2025-06-26T10:00:00'),
+  //   end: new Date('2025-06-26T11:00:00'),
+  //   location: 'Google Meet',
+  //   type: 'meeting',
+  // },
+];

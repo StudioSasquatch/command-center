@@ -15,6 +15,7 @@ import {
   Terminal
 } from 'lucide-react';
 import { InboxCapture } from '@/components/InboxCapture';
+import { CalendarWidget } from '@/components/CalendarWidget';
 
 export default function Dashboard() {
   const ventures = projects.filter(p => p.category === 'venture');
@@ -136,6 +137,9 @@ export default function Dashboard() {
           <div className="space-y-6">
             {/* Activity Feed */}
             <ActivityFeed activities={recentActivity} />
+
+            {/* Calendar */}
+            <CalendarWidget />
 
             {/* Quick Actions */}
             <motion.div 
