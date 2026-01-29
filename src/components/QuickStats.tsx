@@ -7,33 +7,34 @@ import {
   Target,
   TrendingUp
 } from 'lucide-react';
+import { quickStats } from '@/lib/data';
 
 const stats = [
   {
     label: 'ACTIVE VENTURES',
-    value: '4',
+    value: String(quickStats.activeVentures),
     subtext: '+1 this week',
     icon: Briefcase,
     accent: 'ember',
   },
   {
     label: 'PENDING ACTIONS',
-    value: '7',
+    value: String(quickStats.pendingActions),
     subtext: 'Needs attention',
     icon: Clock,
     accent: 'warning',
   },
   {
     label: 'PRIORITY TARGET',
-    value: 'DRIZZLE',
-    subtext: 'Platform transition',
+    value: quickStats.priorityFocus.toUpperCase(),
+    subtext: quickStats.prioritySubtext,
     icon: Target,
     accent: 'plasma',
   },
   {
     label: 'MOMENTUM',
-    value: 'HIGH',
-    subtext: 'Barcelona momentum',
+    value: quickStats.momentum.toUpperCase(),
+    subtext: quickStats.momentumSubtext,
     icon: TrendingUp,
     accent: 'matrix',
   },

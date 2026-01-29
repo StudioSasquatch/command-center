@@ -37,7 +37,9 @@ const typeConfig = {
   },
 };
 
-export function ActivityFeed({ activities }: { activities: Activity[] }) {
+import { recentActivity } from '@/lib/data';
+
+export function ActivityFeed({ activities = recentActivity }: { activities?: Activity[] }) {
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
