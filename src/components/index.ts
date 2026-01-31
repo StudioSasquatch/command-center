@@ -4,3 +4,7 @@ export { ProjectCard } from './ProjectCard';
 export { ActivityFeed } from './ActivityFeed';
 export { InboxCapture } from './InboxCapture';
 export { CalendarWidget } from './CalendarWidget';
+export { TweetComposer } from './TweetComposer';
+export { RecentTweets } from './RecentTweets';
+export { DraftQueue } from './DraftQueue';
+export { Chat, FloatingChat } from './Chat';

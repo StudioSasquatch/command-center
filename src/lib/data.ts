@@ -2,90 +2,116 @@ import { Project, Activity } from '@/types';
 
 // ============================================
 // PROJECT DATA - Noctis updates this file
-// Last updated: 2025-06-25 @ 11:55 PM PST
+// Last updated: 2026-01-30 @ Ada
 // ============================================
 
 export const projects: Project[] = [
   {
     id: 'drizzle',
     name: 'Drizzle',
-    description: 'Crypto Casino - Platform Transition',
+    description: 'Crypto Casino & Sportsbook - V2 Launch',
     status: 'active',
     priority: 1,
-    progress: 65,
-    nextAction: 'Define migration timeline',
+    progress: 75,
+    nextAction: 'Create game thumbnails + promo assets',
     category: 'venture',
     accentColor: 'orange',
     metrics: [
-      { label: 'Beta Duration', value: '9 months' },
-      { label: 'Platform', value: 'Transitioning' },
+      { label: 'Launch', value: 'Feb 15' },
+      { label: 'Days Left', value: '17' },
+      { label: 'Q1 Budget', value: '$50K' },
+    ],
+  },
+  {
+    id: 'the-compound',
+    name: '🎲 The Compound',
+    description: 'Multi-room social gaming platform',
+    status: 'active',
+    priority: 1,
+    progress: 40,
+    nextAction: 'Build out room experiences',
+    category: 'venture',
+    accentColor: 'purple',
+    metrics: [
+      { label: 'Rooms', value: '6' },
+      { label: 'URL', value: 'thecompound.gg' },
+      { label: 'Status', value: 'In Dev' },
     ],
   },
   {
     id: 'timeless-tech',
     name: 'Timeless Tech',
-    description: 'AI Scaling Role - Game Aggregator',
-    status: 'pending',
+    description: 'AI Solutions for iGaming - Partnership',
+    status: 'blocked',
     priority: 2,
     progress: 25,
-    nextAction: 'Follow up on comp/equity offer',
+    nextAction: 'Awaiting response from Borut & Nicola',
     category: 'venture',
     accentColor: 'cyan',
     metrics: [
-      { label: 'Casinos Served', value: '40+' },
-      { label: 'Status', value: 'Awaiting Offer' },
+      { label: 'Casinos', value: '40+' },
+      { label: 'Status', value: 'Post-Barcelona' },
     ],
   },
   {
     id: 'styled-ai',
     name: 'Styled AI',
-    description: 'Personal Stylist App',
-    status: 'pending',
+    description: 'AI Personal Stylist iOS App',
+    status: 'active',
     priority: 3,
-    progress: 10,
-    nextAction: 'Status check - team/tech/MVP',
+    progress: 70,
+    nextAction: 'QA + improvements → App Store submission',
     category: 'venture',
     accentColor: 'purple',
     metrics: [
-      { label: 'Stage', value: 'Early' },
+      { label: 'Stage', value: 'QA' },
+      { label: 'Landing', value: 'getstyled.app' },
     ],
   },
   {
-    id: 'ai-company',
+    id: 'ai-casino-solutions',
     name: 'AI Casino Solutions',
-    description: 'New Venture with Borut & Nicola',
+    description: 'Future Spinoff with Gabriel',
     status: 'pending',
-    priority: 2,
+    priority: 4,
     progress: 5,
-    nextAction: 'Define entity structure',
+    nextAction: 'Blocked by Timeless Tech progress',
     category: 'venture',
     accentColor: 'green',
     metrics: [
-      { label: 'Partners', value: 'Borut, Nicola' },
-      { label: 'Acquirer', value: 'Gabriel' },
+      { label: 'Partners', value: 'Borut, Nicola, Gabriel' },
+      { label: 'Dependency', value: 'Timeless Tech' },
     ],
   },
   {
     id: 'content',
     name: 'Content Creation',
-    description: 'Sharing AI Knowledge',
-    status: 'pending',
+    description: 'Personal Brand + Startups & Suits Pod',
+    status: 'active',
     priority: 4,
-    progress: 0,
-    nextAction: 'Choose platforms & format',
+    progress: 30,
+    nextAction: 'Build LinkedIn presence',
     category: 'content',
     accentColor: 'amber',
+    metrics: [
+      { label: 'Podcast', value: 'Startups & Suits' },
+      { label: 'Co-host', value: 'Michael Jin' },
+    ],
   },
   {
     id: 'ai-dinners',
     name: 'AI Dinners',
-    description: 'Local Business Minds - Recorded',
+    description: 'Local Business AI Roundtable - Recorded',
     status: 'pending',
     priority: 5,
-    progress: 0,
-    nextAction: 'Schedule first dinner',
+    progress: 10,
+    nextAction: 'Plan format + invite list + venue',
     category: 'content',
     accentColor: 'cyan',
+    metrics: [
+      { label: 'Format', value: '5-10 guests' },
+      { label: 'Location', value: 'Santa Cruz area' },
+    ],
   },
 ];
 
@@ -103,19 +129,19 @@ export const lifeProjects: Project[] = [
   },
   {
     id: 'cards',
-    name: 'Baseball Cards',
-    description: 'Collection & Market',
+    name: 'Sports Cards NFTs',
+    description: 'Baseball & Basketball via Gotcha Machine',
     status: 'active',
     priority: 2,
     progress: 100,
-    nextAction: 'Check want list',
+    nextAction: 'Check market',
     category: 'life',
     accentColor: 'orange',
   },
   {
     id: 'warzone',
     name: 'Warzone',
-    description: 'Squad up',
+    description: 'Potential streaming content',
     status: 'active',
     priority: 3,
     progress: 100,
@@ -126,57 +152,135 @@ export const lifeProjects: Project[] = [
 ];
 
 // ============================================
+// THE COMPOUND - Room Details
+// ============================================
+
+export interface CompoundRoom {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  features: string[];
+  status: 'live' | 'building' | 'planned';
+}
+
+export const compoundRooms: CompoundRoom[] = [
+  {
+    id: 'gaming-hall',
+    name: 'Gaming Hall',
+    emoji: '🎰',
+    description: 'Casino games, poker, live dealer',
+    features: ['Slots', 'Table Games', 'Poker', 'Live Dealer'],
+    status: 'building',
+  },
+  {
+    id: 'sports-bar',
+    name: 'Sports Bar',
+    emoji: '🏈',
+    description: 'Fantasy leagues, pick\'em contests',
+    features: ['Fantasy Leagues', 'Pick\'em', 'Live Odds', 'Watch Parties'],
+    status: 'building',
+  },
+  {
+    id: 'batting-cage',
+    name: 'Batting Cage',
+    emoji: '⚾',
+    description: 'Card box breaks, pack wars, memorabilia',
+    features: ['Box Breaks', 'Pack Wars', 'Trading', 'Memorabilia'],
+    status: 'building',
+  },
+  {
+    id: 'gamers-den',
+    name: 'Gamers Den',
+    emoji: '🎮',
+    description: 'Tournaments, brackets, streaming',
+    features: ['Tournaments', 'Brackets', 'Streaming', 'Leaderboards'],
+    status: 'planned',
+  },
+  {
+    id: 'golf-grotto',
+    name: 'Golf Grotto',
+    emoji: '⛳',
+    description: 'Golf leagues, sim challenges',
+    features: ['Golf Leagues', 'Sim Challenges', 'Handicaps', 'Courses'],
+    status: 'planned',
+  },
+  {
+    id: 'locker-room',
+    name: 'Locker Room',
+    emoji: '🏆',
+    description: 'Profile, inventory, wallet',
+    features: ['Profile', 'Inventory', 'Wallet', 'Achievements'],
+    status: 'building',
+  },
+];
+
+// ============================================
 // ACTIVITY FEED - Recent updates
 // ============================================
 
 export const recentActivity: Activity[] = [
   {
+    id: 'compound-1',
+    timestamp: new Date('2026-01-30T10:00:00'),
+    project: 'The Compound',
+    action: 'Project added to Command Center - 6 rooms defined',
+    type: 'milestone',
+  },
+  {
     id: '0',
-    timestamp: new Date('2025-06-25T23:55:00'),
-    project: 'Command Center',
-    action: 'Data sync system activated - Noctis can now push updates',
+    timestamp: new Date('2026-01-29T22:15:00'),
+    project: 'Drizzle',
+    action: 'All strategic docs reviewed - launch brief compiled',
     type: 'milestone',
   },
   {
     id: '1',
-    timestamp: new Date('2025-06-25T19:50:00'),
-    project: 'Command Center',
-    action: 'Dashboard v2 deployed with project detail pages',
-    type: 'milestone',
+    timestamp: new Date('2026-01-29T22:00:00'),
+    project: 'Drizzle',
+    action: 'Google Drive access established - 8 key docs downloaded',
+    type: 'update',
   },
   {
     id: '2',
-    timestamp: new Date('2025-06-25T19:30:00'),
-    project: 'Command Center',
-    action: 'Applied Anthropic frontend-design principles',
+    timestamp: new Date('2026-01-29T21:30:00'),
+    project: 'Styled AI',
+    action: 'Landing page reviewed at getstyled.app - looks solid',
     type: 'update',
   },
   {
     id: '3',
-    timestamp: new Date('2025-06-25T19:00:00'),
-    project: 'Command Center',
-    action: 'Custom domain hq.kirbyholdings.ltd configured',
+    timestamp: new Date('2026-01-29T21:00:00'),
+    project: 'All Projects',
+    action: 'Full project briefing from Jeremy via Telegram voice notes',
     type: 'milestone',
   },
   {
     id: '4',
-    timestamp: new Date('2025-06-25T18:30:00'),
-    project: 'Drizzle',
-    action: 'Full context documented - platform transition',
-    type: 'update',
+    timestamp: new Date('2026-01-29T21:00:00'),
+    project: 'Noctis',
+    action: 'Telegram channel connected and paired',
+    type: 'milestone',
   },
   {
     id: '5',
-    timestamp: new Date('2025-06-25T18:00:00'),
-    project: 'Timeless Tech',
-    action: 'Barcelona meeting notes captured',
+    timestamp: new Date('2026-01-29T20:30:00'),
+    project: 'Command Center',
+    action: 'Google Calendar + Gmail + Drive auth configured',
     type: 'update',
   },
   {
     id: '6',
-    timestamp: new Date('2025-06-25T17:30:00'),
+    timestamp: new Date('2026-01-29T19:00:00'),
+    project: 'Command Center',
+    action: 'Dashboard live at hq.kirbyholdings.ltd',
+    type: 'milestone',
+  },
+  {
+    id: '7',
+    timestamp: new Date('2026-01-29T17:30:00'),
     project: 'Noctis',
-    action: 'AI assistant initialized - Day 1 begins',
+    action: 'Identity established - Noctis Aurelius activated',
     type: 'milestone',
   },
 ];
@@ -186,12 +290,12 @@ export const recentActivity: Activity[] = [
 // ============================================
 
 export const quickStats = {
-  activeVentures: 4,
-  pendingActions: 7,
-  priorityFocus: 'Drizzle',
-  prioritySubtext: 'Platform transition',
+  activeVentures: 7,
+  pendingActions: 12,
+  priorityFocus: 'Drizzle V2 + The Compound',
+  prioritySubtext: 'Gaming empire building',
   momentum: 'High',
-  momentumSubtext: 'Barcelona momentum',
+  momentumSubtext: 'Full context captured',
 };
 
 // ============================================
@@ -199,8 +303,9 @@ export const quickStats = {
 // ============================================
 
 export const inboxItems: string[] = [
-  // Add items here as they come in
-  // Format: "[timestamp] item text"
+  '[URGENT] Drizzle thumbnail specs needed from Jeremy',
+  '[BLOCKED] Styled AI repos need GitHub access',
+  '[WAITING] Timeless Tech - Borut & Nicola response',
 ];
 
 // ============================================
@@ -218,14 +323,19 @@ export interface CalendarEvent {
 }
 
 export const calendarEvents: CalendarEvent[] = [
-  // Events will be populated here
-  // Example:
-  // {
-  //   id: '1',
-  //   title: 'Team Sync',
-  //   start: new Date('2025-06-26T10:00:00'),
-  //   end: new Date('2025-06-26T11:00:00'),
-  //   location: 'Google Meet',
-  //   type: 'meeting',
-  // },
+  {
+    id: '1',
+    title: 'Super Bowl LX',
+    start: new Date('2026-02-09T15:30:00'),
+    end: new Date('2026-02-09T20:00:00'),
+    location: 'Allegiant Stadium, Las Vegas',
+    type: 'deadline', // marketing opportunity
+  },
+  {
+    id: '2',
+    title: '🚀 DRIZZLE V2 LAUNCH',
+    start: new Date('2026-02-15T00:00:00'),
+    end: new Date('2026-02-15T23:59:59'),
+    type: 'deadline',
+  },
 ];
