@@ -32,7 +32,7 @@ interface ContentPost {
   text: string;
   scheduledDate: Date;
   scheduledTime: 'AM' | 'PM';
-  status: 'draft' | 'scheduled' | 'posted';
+  status: 'draft' | 'approved' | 'scheduled' | 'posted' | 'failed';
   platform: 'x' | 'linkedin' | 'instagram' | 'facebook';
   mediaUrl?: string;
   mediaNote?: string;
@@ -584,6 +584,34 @@ export default function ContentCalendar() {
   const savePosts = (newPosts: ContentPost[]) => {
     setPosts(newPosts);
     localStorage.setItem('content-calendar-v5', JSON.stringify(newPosts));
+    // Sync to server for cron access
+    syncPostsToServer(newPosts);
+  };
+
+  const syncPostsToServer = async (postsToSync: ContentPost[]) => {
+    try {
+      await fetch('/api/content/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sync: true,
+          posts: postsToSync.map(p => ({
+            ...p,
+            scheduledDate: p.scheduledDate instanceof Date ? p.scheduledDate.toISOString() : p.scheduledDate
+          }))
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to sync posts to server:', err);
+    }
+  };
+
+  const handleApprove = async (post: ContentPost) => {
+    const updated = posts.map(p =>
+      p.id === post.id ? { ...p, status: 'approved' as const } : p
+    );
+    savePosts(updated);
+    setSelectedPost({ ...post, status: 'approved' });
   };
 
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
@@ -1120,7 +1148,7 @@ export default function ContentCalendar() {
               className="w-full sm:max-w-xl sm:my-8 max-h-[95vh] sm:max-h-none overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
-              <TweetPreview 
+              <TweetPreview
                 post={selectedPost}
                 feedback={getFeedbackForPost(selectedPost.id)}
                 onPost={handlePost}
@@ -1128,6 +1156,7 @@ export default function ContentCalendar() {
                 onEdit={() => setEditingPost(selectedPost)}
                 onFeedback={() => setFeedbackPost(selectedPost)}
                 onResolveFeedback={handleResolveFeedback}
+                onApprove={handleApprove}
                 onReset={() => handleReset(selectedPost.id)}
                 posting={posting === selectedPost.id}
                 onClose={() => setSelectedPost(null)}
@@ -1656,18 +1685,19 @@ function EditModal({
 }
 
 // Full Tweet Preview (Modal) - Optimized for mobile
-function TweetPreview({ 
-  post, 
+function TweetPreview({
+  post,
   feedback,
-  onPost, 
+  onPost,
   onDelete,
   onEdit,
   onFeedback,
   onResolveFeedback,
+  onApprove,
   onReset,
   posting,
   onClose
-}: { 
+}: {
   post: ContentPost;
   feedback: Feedback[];
   onPost: (post: ContentPost) => void;
@@ -1675,6 +1705,7 @@ function TweetPreview({
   onEdit: () => void;
   onFeedback: () => void;
   onResolveFeedback: (id: string) => void;
+  onApprove: (post: ContentPost) => void;
   onReset: () => void;
   posting: boolean;
   onClose: () => void;
@@ -1820,6 +1851,21 @@ function TweetPreview({
             Feedback
           </button>
           <div className="flex-1" />
+          {post.status === 'draft' && (
+            <button
+              onClick={() => onApprove(post)}
+              className="px-4 sm:px-5 py-2 rounded-full bg-[#30d158] text-black font-bold text-xs sm:text-sm hover:bg-[#30d158]/90 transition-colors flex items-center gap-1.5 sm:gap-2"
+            >
+              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              Approve
+            </button>
+          )}
+          {post.status === 'approved' && (
+            <span className="px-4 py-2 rounded-full bg-[#30d158]/20 text-[#30d158] text-xs sm:text-sm font-medium flex items-center gap-1.5">
+              <CheckCircle className="w-3.5 h-3.5" />
+              Approved
+            </span>
+          )}
           <button
             onClick={() => onPost(post)}
             disabled={posting}

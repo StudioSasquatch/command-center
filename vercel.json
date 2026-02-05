@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/social/publish",
-      "schedule": "*/5 * * * *"
+      "path": "/api/content/auto-publish",
+      "schedule": "*/15 * * * *"
     }
   ]
 }
