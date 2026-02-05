@@ -738,7 +738,7 @@ export default function ContentCalendar() {
 
   const handleSubmitFeedback = async () => {
     if (!feedbackPost || !feedbackMessage.trim()) return;
-    
+
     setSubmittingFeedback(true);
     try {
       const res = await fetch('/api/content/feedback', {
@@ -746,17 +746,30 @@ export default function ContentCalendar() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           postId: feedbackPost.id,
-          message: feedbackMessage.trim()
+          message: feedbackMessage.trim(),
+          postText: feedbackPost.text,
+          mediaNote: feedbackPost.mediaNote
         })
       });
-      
+
       if (res.ok) {
+        const data = await res.json();
         await fetchFeedback();
         setFeedbackPost(null);
         setFeedbackMessage('');
+
+        // Show success notification
+        if (data.dispatched) {
+          alert(`✅ Feedback saved and dispatched to ${data.dispatched.agent.toUpperCase()} for action!`);
+        } else {
+          alert('✅ Feedback saved successfully!');
+        }
+      } else {
+        alert('❌ Failed to save feedback. Please try again.');
       }
     } catch (err) {
       console.error('Failed to submit feedback:', err);
+      alert('❌ Failed to save feedback. Please try again.');
     } finally {
       setSubmittingFeedback(false);
     }

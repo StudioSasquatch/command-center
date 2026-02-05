@@ -8,6 +8,9 @@ interface Feedback {
   message: string;
   timestamp: string;
   resolved?: boolean;
+  dispatchedTo?: string;  // Which agent was notified
+  postText?: string;      // Context for the agent
+  mediaNote?: string;     // Image description if relevant
 }
 
 const FEEDBACK_FILE = path.join(process.cwd(), 'public', 'content-feedback.json');
@@ -34,29 +37,70 @@ export async function GET() {
   }
 }
 
+// Detect if feedback is about images/graphics
+function isImageFeedback(message: string): boolean {
+  const imageKeywords = ['image', 'picture', 'photo', 'graphic', 'visual', 'thumbnail', 'media', 'artwork', 'design'];
+  const lowerMessage = message.toLowerCase();
+  return imageKeywords.some(kw => lowerMessage.includes(kw));
+}
+
+// Dispatch task to agent swarm
+async function dispatchToAgent(agent: string, task: string) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
+                    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+    await fetch(`${baseUrl}/api/agents?dispatch=true`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent, task }),
+    });
+  } catch (err) {
+    console.error('Failed to dispatch to agent:', err);
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { postId, message } = body;
+    const { postId, message, postText, mediaNote } = body;
 
     if (!postId || !message) {
       return NextResponse.json({ error: 'postId and message required' }, { status: 400 });
     }
 
     const feedback = await readFeedback();
+
+    // Determine which agent to dispatch to
+    let dispatchedTo: string | undefined;
+    if (isImageFeedback(message)) {
+      dispatchedTo = 'aurora';
+      // Dispatch to Aurora for image feedback
+      const task = `Content feedback for post ${postId}: "${message}"${mediaNote ? ` | Original image brief: ${mediaNote}` : ''}${postText ? ` | Post text: ${postText.substring(0, 100)}...` : ''}`;
+      await dispatchToAgent('aurora', task);
+    }
+
     const newFeedback: Feedback = {
       id: `fb-${Date.now()}`,
       postId,
       message,
       timestamp: new Date().toISOString(),
       resolved: false,
+      dispatchedTo,
+      postText,
+      mediaNote,
     };
 
     feedback.push(newFeedback);
     await writeFeedback(feedback);
 
-    return NextResponse.json({ success: true, feedback: newFeedback });
+    return NextResponse.json({
+      success: true,
+      feedback: newFeedback,
+      dispatched: dispatchedTo ? { agent: dispatchedTo, message: `Task dispatched to ${dispatchedTo}` } : null
+    });
   } catch (error) {
+    console.error('Feedback error:', error);
     return NextResponse.json({ error: 'Failed to save feedback' }, { status: 500 });
   }
 }
