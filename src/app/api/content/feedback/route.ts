@@ -1,41 +1,19 @@
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 interface Feedback {
   id: string;
-  postId: string;
+  post_id: string;
   message: string;
-  timestamp: string;
+  created_at: string;
   resolved?: boolean;
-  dispatchedTo?: string;  // Which agent was notified
-  postText?: string;      // Context for the agent
-  mediaNote?: string;     // Image description if relevant
+  dispatched_to?: string;
+  post_text?: string;
+  media_note?: string;
 }
 
-const FEEDBACK_FILE = path.join(process.cwd(), 'public', 'content-feedback.json');
-
-async function readFeedback(): Promise<Feedback[]> {
-  try {
-    const data = await fs.readFile(FEEDBACK_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-async function writeFeedback(feedback: Feedback[]): Promise<void> {
-  await fs.writeFile(FEEDBACK_FILE, JSON.stringify(feedback, null, 2));
-}
-
-export async function GET() {
-  try {
-    const feedback = await readFeedback();
-    return NextResponse.json({ feedback });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to read feedback' }, { status: 500 });
-  }
-}
+// In-memory fallback for when Supabase is not available
+let memoryFeedback: Feedback[] = [];
 
 // Detect if feedback is about images/graphics
 function isImageFeedback(message: string): boolean {
@@ -60,6 +38,39 @@ async function dispatchToAgent(agent: string, task: string) {
   }
 }
 
+export async function GET() {
+  try {
+    if (isSupabaseConfigured()) {
+      const { data, error } = await supabase
+        .from('content_feedback')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Map to frontend format
+      const feedback = (data || []).map(f => ({
+        id: f.id,
+        postId: f.post_id,
+        message: f.message,
+        timestamp: f.created_at,
+        resolved: f.resolved,
+        dispatchedTo: f.dispatched_to,
+        postText: f.post_text,
+        mediaNote: f.media_note,
+      }));
+
+      return NextResponse.json({ feedback });
+    }
+
+    // Fallback to in-memory
+    return NextResponse.json({ feedback: memoryFeedback });
+  } catch (error) {
+    console.error('Feedback GET error:', error);
+    return NextResponse.json({ error: 'Failed to read feedback' }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -69,30 +80,42 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'postId and message required' }, { status: 400 });
     }
 
-    const feedback = await readFeedback();
-
     // Determine which agent to dispatch to
     let dispatchedTo: string | undefined;
     if (isImageFeedback(message)) {
       dispatchedTo = 'aurora';
-      // Dispatch to Aurora for image feedback
       const task = `Content feedback for post ${postId}: "${message}"${mediaNote ? ` | Original image brief: ${mediaNote}` : ''}${postText ? ` | Post text: ${postText.substring(0, 100)}...` : ''}`;
       await dispatchToAgent('aurora', task);
     }
 
-    const newFeedback: Feedback = {
+    const newFeedback = {
       id: `fb-${Date.now()}`,
-      postId,
+      post_id: postId,
       message,
-      timestamp: new Date().toISOString(),
       resolved: false,
-      dispatchedTo,
-      postText,
-      mediaNote,
+      dispatched_to: dispatchedTo,
+      post_text: postText,
+      media_note: mediaNote,
     };
 
-    feedback.push(newFeedback);
-    await writeFeedback(feedback);
+    if (isSupabaseConfigured()) {
+      const { data, error } = await supabase
+        .from('content_feedback')
+        .insert(newFeedback)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return NextResponse.json({
+        success: true,
+        feedback: data,
+        dispatched: dispatchedTo ? { agent: dispatchedTo, message: `Task dispatched to ${dispatchedTo}` } : null
+      });
+    }
+
+    // Fallback to in-memory
+    memoryFeedback.push({ ...newFeedback, created_at: new Date().toISOString() });
 
     return NextResponse.json({
       success: true,
@@ -100,7 +123,7 @@ export async function POST(request: Request) {
       dispatched: dispatchedTo ? { agent: dispatchedTo, message: `Task dispatched to ${dispatchedTo}` } : null
     });
   } catch (error) {
-    console.error('Feedback error:', error);
+    console.error('Feedback POST error:', error);
     return NextResponse.json({ error: 'Failed to save feedback' }, { status: 500 });
   }
 }
@@ -114,18 +137,27 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'feedbackId required' }, { status: 400 });
     }
 
-    const feedback = await readFeedback();
-    const index = feedback.findIndex(f => f.id === feedbackId);
-    
-    if (index === -1) {
-      return NextResponse.json({ error: 'Feedback not found' }, { status: 404 });
+    if (isSupabaseConfigured()) {
+      const { data, error } = await supabase
+        .from('content_feedback')
+        .update({ resolved: resolved ?? true })
+        .eq('id', feedbackId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({ success: true, feedback: data });
     }
 
-    feedback[index].resolved = resolved ?? true;
-    await writeFeedback(feedback);
+    // Fallback to in-memory
+    const index = memoryFeedback.findIndex(f => f.id === feedbackId);
+    if (index !== -1) {
+      memoryFeedback[index].resolved = resolved ?? true;
+    }
 
-    return NextResponse.json({ success: true, feedback: feedback[index] });
+    return NextResponse.json({ success: true });
   } catch (error) {
+    console.error('Feedback PATCH error:', error);
     return NextResponse.json({ error: 'Failed to update feedback' }, { status: 500 });
   }
 }
@@ -139,12 +171,21 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'id required' }, { status: 400 });
     }
 
-    const feedback = await readFeedback();
-    const filtered = feedback.filter(f => f.id !== feedbackId);
-    await writeFeedback(filtered);
+    if (isSupabaseConfigured()) {
+      const { error } = await supabase
+        .from('content_feedback')
+        .delete()
+        .eq('id', feedbackId);
 
+      if (error) throw error;
+      return NextResponse.json({ success: true });
+    }
+
+    // Fallback to in-memory
+    memoryFeedback = memoryFeedback.filter(f => f.id !== feedbackId);
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error('Feedback DELETE error:', error);
     return NextResponse.json({ error: 'Failed to delete feedback' }, { status: 500 });
   }
 }

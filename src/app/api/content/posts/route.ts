@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 export interface ContentPost {
   id: string;
@@ -16,34 +15,51 @@ export interface ContentPost {
   edited?: boolean;
   approvedAt?: string;
   publishedAt?: string;
-  feedback?: string[];  // Agent notes/feedback
+  feedback?: string[];
   publishError?: string;
 }
 
-const POSTS_FILE = path.join(process.cwd(), 'data', 'content-posts.json');
+// In-memory fallback for when Supabase is not available
+let memoryPosts: ContentPost[] = [];
 
-async function ensureDataDir() {
-  const dir = path.join(process.cwd(), 'data');
-  try {
-    await fs.access(dir);
-  } catch {
-    await fs.mkdir(dir, { recursive: true });
-  }
+// Map from frontend camelCase to database snake_case
+function toDbFormat(post: ContentPost) {
+  return {
+    id: post.id,
+    text: post.text,
+    scheduled_date: post.scheduledDate,
+    scheduled_time: post.scheduledTime,
+    status: post.status,
+    platform: post.platform,
+    media_url: post.mediaUrl,
+    media_note: post.mediaNote,
+    is_thread: post.isThread,
+    self_reply: post.selfReply,
+    edited: post.edited,
+    approved_at: post.approvedAt,
+    published_at: post.publishedAt,
+    publish_error: post.publishError,
+  };
 }
 
-async function readPosts(): Promise<ContentPost[]> {
-  try {
-    await ensureDataDir();
-    const data = await fs.readFile(POSTS_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-async function writePosts(posts: ContentPost[]): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(POSTS_FILE, JSON.stringify(posts, null, 2));
+// Map from database snake_case to frontend camelCase
+function fromDbFormat(row: Record<string, unknown>): ContentPost {
+  return {
+    id: row.id as string,
+    text: row.text as string,
+    scheduledDate: row.scheduled_date as string,
+    scheduledTime: row.scheduled_time as 'AM' | 'PM',
+    status: row.status as ContentPost['status'],
+    platform: row.platform as ContentPost['platform'],
+    mediaUrl: row.media_url as string | undefined,
+    mediaNote: row.media_note as string | undefined,
+    isThread: row.is_thread as boolean | undefined,
+    selfReply: row.self_reply as string | undefined,
+    edited: row.edited as boolean | undefined,
+    approvedAt: row.approved_at as string | undefined,
+    publishedAt: row.published_at as string | undefined,
+    publishError: row.publish_error as string | undefined,
+  };
 }
 
 // GET - Retrieve all posts
@@ -53,29 +69,41 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const dueNow = searchParams.get('dueNow');
 
-    let posts = await readPosts();
+    if (isSupabaseConfigured()) {
+      let query = supabase.from('content_posts').select('*');
 
-    // Filter by status
+      if (status) {
+        query = query.eq('status', status);
+      }
+
+      const { data, error } = await query.order('scheduled_date', { ascending: true });
+      if (error) throw error;
+
+      let posts = (data || []).map(fromDbFormat);
+
+      // Filter due posts if requested
+      if (dueNow === 'true') {
+        const now = new Date();
+        posts = posts.filter(p => {
+          if (p.status !== 'approved') return false;
+          const scheduledDate = new Date(p.scheduledDate);
+          if (p.scheduledTime === 'AM') {
+            scheduledDate.setHours(8, 0, 0, 0);
+          } else {
+            scheduledDate.setHours(17, 0, 0, 0);
+          }
+          return scheduledDate <= now;
+        });
+      }
+
+      return NextResponse.json({ posts });
+    }
+
+    // Fallback to in-memory
+    let posts = [...memoryPosts];
     if (status) {
       posts = posts.filter(p => p.status === status);
     }
-
-    // Get posts due for publishing (approved + time has passed)
-    if (dueNow === 'true') {
-      const now = new Date();
-      posts = posts.filter(p => {
-        if (p.status !== 'approved') return false;
-        const scheduledDate = new Date(p.scheduledDate);
-        // Set time based on AM/PM
-        if (p.scheduledTime === 'AM') {
-          scheduledDate.setHours(8, 0, 0, 0);
-        } else {
-          scheduledDate.setHours(17, 0, 0, 0);
-        }
-        return scheduledDate <= now;
-      });
-    }
-
     return NextResponse.json({ posts });
   } catch (error) {
     console.error('Failed to read posts:', error);
@@ -90,20 +118,42 @@ export async function POST(request: NextRequest) {
 
     // Sync all posts (from client localStorage)
     if (body.sync && Array.isArray(body.posts)) {
-      await writePosts(body.posts);
+      if (isSupabaseConfigured()) {
+        // Upsert all posts
+        const dbPosts = body.posts.map(toDbFormat);
+        const { error } = await supabase
+          .from('content_posts')
+          .upsert(dbPosts, { onConflict: 'id' });
+
+        if (error) throw error;
+        return NextResponse.json({ success: true, synced: body.posts.length });
+      }
+
+      // Fallback to in-memory
+      memoryPosts = body.posts;
       return NextResponse.json({ success: true, synced: body.posts.length });
     }
 
     // Create single post
-    const posts = await readPosts();
     const newPost: ContentPost = {
       ...body,
       id: body.id || `post-${Date.now()}`,
       status: body.status || 'draft',
     };
-    posts.push(newPost);
-    await writePosts(posts);
 
+    if (isSupabaseConfigured()) {
+      const { data, error } = await supabase
+        .from('content_posts')
+        .insert(toDbFormat(newPost))
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({ success: true, post: fromDbFormat(data) });
+    }
+
+    // Fallback to in-memory
+    memoryPosts.push(newPost);
     return NextResponse.json({ success: true, post: newPost });
   } catch (error) {
     console.error('Failed to save post:', error);
@@ -121,29 +171,42 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Post ID required' }, { status: 400 });
     }
 
-    const posts = await readPosts();
-    const index = posts.findIndex(p => p.id === id);
+    // Add timestamps for status changes
+    if (updates.status === 'approved') {
+      updates.approvedAt = new Date().toISOString();
+    }
+    if (updates.status === 'posted') {
+      updates.publishedAt = new Date().toISOString();
+    }
 
+    if (isSupabaseConfigured()) {
+      // Convert to DB format
+      const dbUpdates: Record<string, unknown> = {};
+      if (updates.status) dbUpdates.status = updates.status;
+      if (updates.approvedAt) dbUpdates.approved_at = updates.approvedAt;
+      if (updates.publishedAt) dbUpdates.published_at = updates.publishedAt;
+      if (updates.publishError) dbUpdates.publish_error = updates.publishError;
+      if (updates.text) dbUpdates.text = updates.text;
+      if (updates.edited !== undefined) dbUpdates.edited = updates.edited;
+
+      const { data, error } = await supabase
+        .from('content_posts')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({ success: true, post: fromDbFormat(data) });
+    }
+
+    // Fallback to in-memory
+    const index = memoryPosts.findIndex(p => p.id === id);
     if (index === -1) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
-
-    // Update the post
-    posts[index] = { ...posts[index], ...updates };
-
-    // If approving, add timestamp
-    if (updates.status === 'approved' && !posts[index].approvedAt) {
-      posts[index].approvedAt = new Date().toISOString();
-    }
-
-    // If publishing, add timestamp
-    if (updates.status === 'posted' && !posts[index].publishedAt) {
-      posts[index].publishedAt = new Date().toISOString();
-    }
-
-    await writePosts(posts);
-
-    return NextResponse.json({ success: true, post: posts[index] });
+    memoryPosts[index] = { ...memoryPosts[index], ...updates };
+    return NextResponse.json({ success: true, post: memoryPosts[index] });
   } catch (error) {
     console.error('Failed to update post:', error);
     return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
@@ -160,10 +223,18 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Post ID required' }, { status: 400 });
     }
 
-    const posts = await readPosts();
-    const filtered = posts.filter(p => p.id !== id);
-    await writePosts(filtered);
+    if (isSupabaseConfigured()) {
+      const { error } = await supabase
+        .from('content_posts')
+        .delete()
+        .eq('id', id);
 
+      if (error) throw error;
+      return NextResponse.json({ success: true });
+    }
+
+    // Fallback to in-memory
+    memoryPosts = memoryPosts.filter(p => p.id !== id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Failed to delete post:', error);
