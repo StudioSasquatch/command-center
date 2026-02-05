@@ -187,13 +187,15 @@ function AgentCard({ agent, index }: { agent: Agent; index: number }) {
             : '0 4px 20px rgba(0,0,0,0.3)',
         }}
       >
-        {/* Full bleed image */}
+        {/* Full bleed image - high quality */}
         <Image
           src={agent.avatar}
           alt={agent.name}
           fill
           className="object-cover object-top"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+          sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 250px"
+          quality={90}
+          priority={index < 3}
         />
 
         {/* Gradient overlay for text readability */}
