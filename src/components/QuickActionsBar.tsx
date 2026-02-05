@@ -9,6 +9,7 @@ import {
   Bot, 
   Mail,
   MessageSquare,
+  TrendingUp,
   X,
   Zap
 } from 'lucide-react';
@@ -39,6 +40,13 @@ export function QuickActionsBar() {
       href: '/chat'
     },
     { 
+      icon: TrendingUp, 
+      label: 'Trader Hub', 
+      emoji: '📈',
+      color: '#00e676',
+      href: '/trading'
+    },
+    { 
       icon: Palette, 
       label: 'Generate Graphic', 
       emoji: '🎨',
@@ -65,13 +73,6 @@ export function QuickActionsBar() {
       emoji: '🤖',
       color: '#ff9100',
       onClick: () => showToast('🤖 Spawn Agent - Coming soon!')
-    },
-    { 
-      icon: Mail, 
-      label: 'Check Inbox', 
-      emoji: '📧',
-      color: '#ff9f0a',
-      onClick: () => showToast('📧 Check Inbox - Coming soon!')
     },
   ];
 

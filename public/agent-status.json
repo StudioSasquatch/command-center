@@ -1,10 +1,25 @@
 {
   "agents": {
-    "noctis": { "status": "working", "task": null },
-    "aurora": { "status": "idle", "task": null },
-    "sage": { "status": "idle", "task": null },
-    "ada": { "status": "idle", "task": null },
-    "nova": { "status": "idle", "task": null }
+    "noctis": {
+      "status": "working",
+      "task": "Loading content calendar"
+    },
+    "aurora": {
+      "status": "idle",
+      "task": null
+    },
+    "sage": {
+      "status": "done",
+      "task": "Content calendar complete - 37 posts"
+    },
+    "ada": {
+      "status": "idle",
+      "task": null
+    },
+    "nova": {
+      "status": "idle",
+      "task": null
+    }
   },
-  "lastUpdated": null
+  "lastUpdated": "2026-02-01T21:58:00Z"
 }

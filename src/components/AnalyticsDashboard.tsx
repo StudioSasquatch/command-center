@@ -35,20 +35,16 @@ interface XAnalyticsResponse {
     id: string;
     username: string;
     name: string;
-    publicMetrics: {
-      followersCount: number;
-      followingCount: number;
-      tweetCount: number;
-      listedCount: number;
-    };
-  };
+    followers: number;
+    following: number;
+    tweetCount: number;
+  } | null;
   aggregatedMetrics: {
-    totalLikes: number;
-    totalRetweets: number;
-    totalReplies: number;
-    totalImpressions: number;
-    avgEngagementRate: number;
-  };
+    followers: number;
+    recentImpressions: number;
+    engagementRate: number;
+    tweetsAnalyzed: number;
+  } | null;
   isLive: boolean;
   fromCache?: boolean;
   error?: string;
@@ -156,34 +152,36 @@ export function AnalyticsDashboard() {
       const response = await fetch('/api/analytics/twitter', { method });
       const data: XAnalyticsResponse = await response.json();
 
-      if (data.isLive && data.user) {
+      if (data.isLive && data.user && data.aggregatedMetrics) {
         // Update X-specific metrics with real data
+        const user = data.user;
+        const metrics = data.aggregatedMetrics;
         setMetrics(prev => prev.map(metric => {
           if (metric.id === 'x-followers') {
             return {
               ...metric,
-              value: formatNumber(data.user.publicMetrics.followersCount),
-              change: data.user.publicMetrics.followersCount,
-              changeLabel: `${formatNumber(data.user.publicMetrics.tweetCount)} tweets`,
+              value: formatNumber(user.followers),
+              change: user.followers,
+              changeLabel: `${formatNumber(user.tweetCount)} tweets`,
               isLive: true,
             };
           }
           if (metric.id === 'x-engagement') {
-            const rate = data.aggregatedMetrics.avgEngagementRate;
+            const rate = metrics.engagementRate;
             return {
               ...metric,
               value: `${rate.toFixed(2)}%`,
               change: rate,
-              changeLabel: `${formatNumber(data.aggregatedMetrics.totalLikes)} likes recently`,
+              changeLabel: `${metrics.tweetsAnalyzed} tweets analyzed`,
               isLive: true,
             };
           }
           if (metric.id === 'total-reach') {
             return {
               ...metric,
-              value: formatNumber(data.aggregatedMetrics.totalImpressions),
-              change: data.aggregatedMetrics.totalImpressions,
-              changeLabel: `${formatNumber(data.aggregatedMetrics.totalRetweets)} retweets`,
+              value: formatNumber(metrics.recentImpressions),
+              change: metrics.recentImpressions,
+              changeLabel: `from ${metrics.tweetsAnalyzed} recent tweets`,
               isLive: true,
             };
           }

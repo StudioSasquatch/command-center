@@ -1,5 +1,5 @@
 export type ProjectStatus = 'active' | 'pending' | 'blocked' | 'complete';
-export type ProjectPriority = 1 | 2 | 3 | 4 | 5;
+export type ProjectPriority = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface Project {
   id: string;
@@ -9,8 +9,8 @@ export interface Project {
   priority: ProjectPriority;
   progress: number; // 0-100
   nextAction: string;
-  category: 'venture' | 'content' | 'life';
-  accentColor: 'orange' | 'cyan' | 'purple' | 'green' | 'amber';
+  category: 'venture' | 'content' | 'life' | 'client';
+  accentColor: 'orange' | 'cyan' | 'purple' | 'green' | 'amber' | 'blue';
   metrics?: {
     label: string;
     value: string | number;

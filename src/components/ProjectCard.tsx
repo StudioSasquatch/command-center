@@ -10,7 +10,8 @@ import {
   Bot, 
   Video, 
   Users,
-  ChevronRight
+  ChevronRight,
+  Home
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
@@ -20,6 +21,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; strokeWi
   'ai-company': Bot,
   'content': Video,
   'ai-dinners': Users,
+  'fassio-roofing': Home,
 };
 
 const accentConfig = {
@@ -62,6 +64,14 @@ const accentConfig = {
     text: 'text-[#ffd60a]',
     bg: 'bg-[#ffd60a]/10',
     border: 'border-[#ffd60a]/20',
+  },
+  blue: {
+    primary: '#2563eb',
+    glow: 'rgba(37, 99, 235, 0.15)',
+    gradient: 'from-[#2563eb] to-[#3b82f6]',
+    text: 'text-[#3b82f6]',
+    bg: 'bg-[#3b82f6]/10',
+    border: 'border-[#3b82f6]/20',
   },
 };
 

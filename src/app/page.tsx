@@ -14,7 +14,8 @@ import {
   Calendar,
   ArrowRight,
   Mic,
-  BarChart3
+  BarChart3,
+  Briefcase
 } from 'lucide-react';
 import Link from 'next/link';
 import { AgentSwarm } from '@/components/AgentSwarm';
@@ -24,6 +25,7 @@ import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
 
 export default function Dashboard() {
   const ventures = projects.filter(p => p.category === 'venture');
+  const clients = projects.filter(p => p.category === 'client');
 
   return (
     <div className="min-h-screen relative">
@@ -72,6 +74,34 @@ export default function Dashboard() {
             ))}
           </div>
         </section>
+
+        {/* Clients */}
+        {clients.length > 0 && (
+          <section>
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35 }}
+              className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"
+            >
+              <div className="p-1.5 sm:p-2 rounded-lg bg-[#00e676]/10">
+                <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-[#00e676]" />
+              </div>
+              <h2 className="font-display text-lg sm:text-xl font-bold tracking-wider text-white uppercase">
+                Clients
+              </h2>
+              <span className="font-mono text-[10px] sm:text-xs text-[var(--text-muted)] tracking-wider">
+                {clients.length} ACTIVE
+              </span>
+            </motion.div>
+            
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+              {clients.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Content Hub */}
         <section>

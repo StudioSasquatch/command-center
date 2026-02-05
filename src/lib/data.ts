@@ -84,6 +84,22 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'publishhub',
+    name: '📝 PublishHub',
+    description: 'SEO content network for Drizzle',
+    status: 'active',
+    priority: 2,
+    progress: 80,
+    nextAction: 'Create content strategy + publish articles',
+    category: 'venture',
+    accentColor: 'blue',
+    metrics: [
+      { label: 'URL', value: 'publishhub.io' },
+      { label: 'Purpose', value: 'SEO Capture' },
+      { label: 'Parent', value: 'Drizzle' },
+    ],
+  },
+  {
     id: 'content',
     name: 'Content Creation',
     description: 'Personal Brand + Startups & Suits Pod',
@@ -111,6 +127,22 @@ export const projects: Project[] = [
     metrics: [
       { label: 'Format', value: '5-10 guests' },
       { label: 'Location', value: 'Santa Cruz area' },
+    ],
+  },
+  {
+    id: 'fassio-roofing',
+    name: '🏠 Fassio Roofing',
+    description: 'Website rebuild for Mike Fassio - Santa Cruz',
+    status: 'active',
+    priority: 6,
+    progress: 90,
+    nextAction: 'Get Mike\'s phone # + license # + real photos',
+    category: 'client',
+    accentColor: 'blue',
+    metrics: [
+      { label: 'Live', value: 'fassio-roofing.vercel.app' },
+      { label: 'Client', value: 'Mike Fassio' },
+      { label: 'Type', value: 'Pro Bono' },
     ],
   },
 ];
@@ -220,6 +252,13 @@ export const compoundRooms: CompoundRoom[] = [
 // ============================================
 
 export const recentActivity: Activity[] = [
+  {
+    id: 'fassio-1',
+    timestamp: new Date('2026-01-31T14:55:00'),
+    project: 'Fassio Roofing',
+    action: 'Website LIVE at fassio-roofing.vercel.app - full rebuild done',
+    type: 'milestone',
+  },
   {
     id: 'compound-1',
     timestamp: new Date('2026-01-30T10:00:00'),

@@ -14,6 +14,8 @@ import {
   MessageCircle,
   Sparkles,
   ChevronRight,
+  Share2,
+  TrendingUp,
 } from 'lucide-react';
 
 interface NavItem {
@@ -34,6 +36,13 @@ const navItems: NavItem[] = [
     description: 'Command center overview',
   },
   {
+    href: '/social',
+    label: 'Social Hub',
+    icon: Share2,
+    color: '#ff5722',
+    description: 'Multi-platform posting',
+  },
+  {
     href: '/content',
     label: 'Content Calendar',
     icon: Calendar,
@@ -46,6 +55,27 @@ const navItems: NavItem[] = [
     icon: Mic,
     color: '#bf5af2',
     description: 'Startups & Suits',
+  },
+  {
+    href: '/betting',
+    label: 'Betting Hub',
+    icon: TrendingUp,
+    color: '#a855f7',
+    description: 'Polymarket trading',
+  },
+  {
+    href: '/trading',
+    label: 'Trading Agent',
+    icon: TrendingUp,
+    color: '#06b6d4',
+    description: 'Robinhood stocks',
+  },
+  {
+    href: '/swarm',
+    label: 'Agent Swarm',
+    icon: Sparkles,
+    color: '#a78bfa',
+    description: 'Your AI workforce',
   },
   {
     href: '/chat',

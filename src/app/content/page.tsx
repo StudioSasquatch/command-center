@@ -9,6 +9,7 @@ import {
   Trash2,
   Plus,
   Check,
+  CheckCircle,
   Clock,
   ChevronLeft,
   ChevronRight,
@@ -32,7 +33,7 @@ interface ContentPost {
   scheduledDate: Date;
   scheduledTime: 'AM' | 'PM';
   status: 'draft' | 'scheduled' | 'posted';
-  platform: 'x' | 'linkedin' | 'threads';
+  platform: 'x' | 'linkedin' | 'instagram' | 'facebook';
   mediaUrl?: string;
   mediaNote?: string;
   isThread?: boolean;
@@ -49,159 +50,458 @@ interface Feedback {
 }
 
 // OPTIMIZED for X Algorithm - every post has hook + image + CTA
+// NEW CONTENT CALENDAR - Generated 2026-02-01
+// 37 posts across X, LinkedIn, Instagram, Facebook
+// Dark/moody/purple brand aesthetic
+// NEW CONTENT CALENDAR - Generated 2026-02-01
+// 37 posts across X, LinkedIn, Instagram, Facebook
+// Dark/moody/purple brand aesthetic - Graphics by Aurora
 const initialPosts: ContentPost[] = [
-  // FRIDAY JAN 31
   {
     id: '1',
-    text: "Startup vs small business — most people don't know the difference.\n\nSmall business = lifestyle. Pays the bills, grows slow, that's fine.\n\nStartup = rocket ship or crater. 10x in 18 months or you're dead.\n\nNothing wrong with either. But know which game you're playing.\n\nWhich one are you building? 👇",
-    scheduledDate: new Date('2026-01-31'),
+    text: "Building in the shadows while others build in the spotlight.",
+    scheduledDate: new Date('2026-02-03'),
     scheduledTime: 'AM',
     status: 'draft',
     platform: 'x',
-    mediaUrl: '/media/post1-startup-vs-business.png',
-    selfReply: "The fastest way to know: Are you taking VC money? If yes, you're on the rocket ship. No pressure. 🚀"
+    mediaNote: "Dark silhouette of a figure working at a computer screen in a dimly lit room, purple glow from multiple monitors, cinematic lighting",
+    mediaUrl: '/media/post1-x.png',
+    isThread: false,
+    selfReply: "The noise fades when you focus on the work."
   },
   {
     id: '2',
-    text: "14 days until we launch.\n\nTwo years of building. Pivots. Sleepless nights. Fights with co-founders. Moments where I almost quit.\n\nThe nerves never go away. You just get better at channeling them into fuel.\n\nAnyone else in launch mode right now? How you holding up?",
-    scheduledDate: new Date('2026-01-31'),
+    text: "Some conversations happen in coffee shops. Others happen in boardrooms at 2am.",
+    scheduledDate: new Date('2026-02-03'),
     scheduledTime: 'PM',
     status: 'draft',
-    platform: 'x',
-    mediaUrl: '/media/post2-14-days.png',
-    selfReply: "The secret nobody tells you: launch day is just the beginning. The real work starts after."
+    platform: 'instagram',
+    mediaNote: "Moody shot of empty boardroom with city lights visible through floor-to-ceiling windows, single laptop open casting purple light, dark aesthetic",
+    mediaUrl: '/media/post2-instagram.png',
+    isThread: false,
+    selfReply: undefined
   },
-  // SATURDAY FEB 1
   {
     id: '3',
-    text: "Saturday morning thought:\n\nThe best founders I know aren't the smartest in the room.\n\nThey're the ones who kept showing up when everyone else quit.\n\nTalent opens doors.\nPersistence walks through them.\n\nWhat's one thing you almost quit but didn't? 👇",
-    scheduledDate: new Date('2026-02-01'),
+    text: "The difference between a startup and a lifestyle business:\n\nOne scales you. The other scales with you.\n\nChoose wisely.",
+    scheduledDate: new Date('2026-02-04'),
     scheduledTime: 'AM',
     status: 'draft',
     platform: 'x',
-    mediaUrl: '/media/post3-persistence.png',
-    selfReply: "For me it was my first startup. Failed after 18 months. Almost went back to corporate. Glad I didn't."
+    mediaNote: "Abstract geometric shapes in dark purple and black, representing growth and scale, minimalist design",
+    mediaUrl: '/media/post3-x.png',
+    isThread: false,
+    selfReply: "Most people optimize for the wrong variable."
   },
   {
     id: '4',
-    text: "\"Crypto is the wild west with no rules.\"\n\nLol. Building a crypto casino taught me more about compliance than my entire corporate career.\n\n• KYC verification\n• AML monitoring  \n• Gaming licenses\n• Banking relationships\n• Geo-restrictions\n• Transaction limits\n\nThe regulations are intense. Most people have no idea.\n\nWhat's something in your industry that's way more regulated than people think?",
-    scheduledDate: new Date('2026-02-01'),
+    text: "After recording 100+ episodes of Startups & Suits, one pattern emerges:\n\nThe founders who win don't talk about winning.\nThey talk about building.\n\nThere's a difference between being in the game and being the game.\n\nThe best players you've never heard of are busy creating the future while everyone else is busy talking about it.\n\nWhat are you building that no one knows about yet?",
+    scheduledDate: new Date('2026-02-04'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'linkedin',
+    mediaNote: "Dark, cinematic shot of a recording studio with professional microphones, warm purple lighting, mysterious atmosphere",
+    mediaUrl: '/media/post4-linkedin.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '5',
+    text: "Barcelona rooftops hit different when you're debugging code at sunset.",
+    scheduledDate: new Date('2026-02-04'),
     scheduledTime: 'PM',
     status: 'draft',
     platform: 'x',
-    isThread: true,
-    mediaUrl: '/media/post4-crypto-compliance.png',
-    selfReply: "Thread: Let me break down what it actually takes to launch a legal crypto casino 🧵"
-  },
-  // SUNDAY FEB 2
-  {
-    id: '5',
-    text: "Tool that changed how I work:\n\nClawdbot — AI assistant that lives in Telegram and controls my entire computer.\n\nIt reads my emails. Checks my calendar. Writes code. Deploys sites. All from chat.\n\nBuilt by @anthropic.\n\nWhat's one tool you use daily that most people haven't heard of? 👇",
-    scheduledDate: new Date('2026-02-02'),
-    scheduledTime: 'AM',
-    status: 'draft',
-    platform: 'x',
-    mediaUrl: '/media/post5-clawdbot.png',
-    selfReply: "Link to check it out: [REPLY WITH LINK - keeps it out of main post for algo]"
+    mediaNote: "Silhouette of someone with laptop on a Barcelona rooftop terrace at golden hour, purple and orange sky, moody urban landscape",
+    mediaUrl: '/media/post5-x.png',
+    isThread: false,
+    selfReply: undefined
   },
   {
     id: '6',
-    text: "My Sunday prep routine (takes 30 min, saves 10+ hours):\n\n1. Review calendar for the week\n2. Identify THE ONE thing that moves the needle\n3. Block 3 deep work sessions (no meetings)\n4. Delete or delegate everything else\n\nMost people are busy.\nFew are productive.\n\nWhat's your Sunday prep look like?",
-    scheduledDate: new Date('2026-02-02'),
+    text: "The view from the room where decisions happen.",
+    scheduledDate: new Date('2026-02-05'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Artistic shot from inside looking out through venetian blinds at city skyline, dramatic shadows and purple lighting, film noir aesthetic",
+    mediaUrl: '/media/post6-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '7',
+    text: "Hot take: The best product launches happen when no one expects them.\n\nSurprise is a feature, not a bug.",
+    scheduledDate: new Date('2026-02-05'),
     scheduledTime: 'PM',
     status: 'draft',
     platform: 'x',
-    mediaUrl: '/media/post6-sunday-prep.png',
-    selfReply: "The game changer: blocking time BEFORE the week starts. Once Monday hits, your calendar is under attack."
-  },
-  // MONDAY FEB 3
-  {
-    id: '7',
-    text: "Hot take:\n\n90% of \"AI companies\" are just ChatGPT wrappers with a $50M valuation.\n\nReal AI companies:\n• Build proprietary models\n• Have data moats\n• Own their infrastructure\n\nEverything else is a feature, not a company.\n\nAgree or disagree? 👇",
-    scheduledDate: new Date('2026-02-03'),
-    scheduledTime: 'AM',
-    status: 'draft',
-    platform: 'x',
-    mediaUrl: '/media/post7-ai-wrapper.png',
-    selfReply: "The test: Could OpenAI ship your product as a feature tomorrow and kill you? If yes, you're a wrapper."
+    mediaNote: "Dark abstract design with hidden elements becoming visible, purple and black gradient, mysterious reveal concept",
+    mediaUrl: '/media/post7-x.png',
+    isThread: false,
+    selfReply: "Anticipation > announcement"
   },
   {
     id: '8',
-    text: "The last 10% takes 90% of the time.\n\nWe're in that final 10% right now.\n\n• Every edge case\n• Every error state\n• Every \"what if\"\n• Every loading screen\n• Every empty state\n\n11 days to launch. Shipping soon.\n\nFounders in the final stretch — how you feeling?",
-    scheduledDate: new Date('2026-02-03'),
-    scheduledTime: 'PM',
+    text: "Three years ago, I was building something that didn't exist.\n\nToday, the market is finally ready for what we've been creating in silence.\n\nTiming isn't everything—it's the only thing.\n\nThe gap between vision and reality is where fortunes are made. Most people see the gap and retreat. A few see it and build bridges.\n\nWhich type are you?",
+    scheduledDate: new Date('2026-02-06'),
+    scheduledTime: 'AM',
     status: 'draft',
-    platform: 'x',
-    mediaUrl: '/media/post8-11-days.png',
-    selfReply: "The trap: thinking you need to be \"ready.\" You'll never feel ready. Ship it."
+    platform: 'facebook',
+    mediaNote: "Conceptual image of a bridge appearing out of fog, connecting two landscapes, dark moody atmosphere with purple lighting",
+    mediaUrl: '/media/post8-facebook.png',
+    isThread: false,
+    selfReply: undefined
   },
-  // TUESDAY FEB 4
   {
     id: '9',
-    text: "How I learn anything fast:\n\n1. Pick a project that REQUIRES the skill\n2. Start before you're ready\n3. Figure it out as you go\n4. Google everything shamelessly\n5. Ship something ugly, then iterate\n\nI knew nothing about iGaming 2 years ago.\n\nNow I'm launching a casino.\n\nBooks are for reference. Building is for learning.\n\nWhat skill did you learn by doing? 👇",
-    scheduledDate: new Date('2026-02-04'),
+    text: "Santa Cruz mornings.\nMiami nights.\nBarcelona afternoons.\nDubai possibilities.\n\nLocation is a tool, not a destination.",
+    scheduledDate: new Date('2026-02-06'),
     scheduledTime: 'AM',
     status: 'draft',
     platform: 'x',
-    isThread: true,
-    mediaUrl: '/media/post9-learn-by-building.png',
-    selfReply: "The uncomfortable truth: Most courses and tutorials are procrastination disguised as productivity."
+    mediaNote: "Split screen collage showing glimpses of all four cities in moody, cinematic style with purple color grading",
+    mediaUrl: '/media/post9-x.png',
+    isThread: false,
+    selfReply: undefined
   },
   {
     id: '10',
-    text: "\"How do you get so much done?\"\n\nBoring answer: I eliminated everything that doesn't matter.\n\n❌ No news\n❌ No notifications  \n❌ No meetings without agendas\n❌ No Slack/email before noon\n❌ No \"quick calls\"\n\nProtect your time like it's worth $10,000/hour.\n\nBecause it might be.\n\nWhat's one thing you eliminated that changed everything?",
-    scheduledDate: new Date('2026-02-04'),
+    text: "The most dangerous advice: \"Follow your passion.\"\n\nBetter advice: \"Build your obsession.\"\n\nPassion fades. Obsession compounds.",
+    scheduledDate: new Date('2026-02-06'),
     scheduledTime: 'PM',
     status: 'draft',
     platform: 'x',
-    mediaUrl: '/media/post10-10k-hour.png',
-    selfReply: "The hardest one for me: saying no to \"coffee chats.\" Had to learn that my time has value."
+    mediaNote: "Abstract visualization of compound growth, dark background with purple ascending lines, minimalist and powerful",
+    mediaUrl: '/media/post10-x.png',
+    isThread: false,
+    selfReply: "Obsession is passion with a business plan."
   },
-  // WEDNESDAY FEB 5
   {
     id: '11',
-    text: "Shoutout to the people grinding behind the scenes.\n\nThe late nights.\nThe \"one more thing\" that becomes five more things.\nThe Slack messages at 2am.\nThe bugs found at the worst possible time.\n\nLaunch week is coming. You know who you are.\n\nTag someone grinding right now 👇",
-    scheduledDate: new Date('2026-02-05'),
+    text: "Behind every overnight success is a decade of nights like this.",
+    scheduledDate: new Date('2026-02-07'),
     scheduledTime: 'AM',
     status: 'draft',
-    platform: 'x',
-    mediaUrl: '/media/post11-built-different.png',
-    selfReply: "To my team reading this: I see you. Thank you. We're almost there. 🫡"
+    platform: 'instagram',
+    mediaNote: "Time-lapse style image showing multiple coffee cups and laptop screens through the night, purple ambient lighting, dedication concept",
+    mediaUrl: '/media/post11-instagram.png',
+    isThread: false,
+    selfReply: undefined
   },
   {
     id: '12',
-    text: "Startup lesson that cost me 6 months:\n\nHire fast, fire faster.\n\nA bad hire doesn't just waste money.\nThey waste momentum.\nThey kill culture.\nThey make good people leave.\n\nA great hire pays for themselves in 6 weeks.\n\nDon't let loyalty to a person sink the ship.\n\nHardest firing decision you had to make? (No names needed)",
-    scheduledDate: new Date('2026-02-05'),
+    text: "What happens when gambling meets technology?\n\nYou get an industry.\n\nWhat happens when an industry meets innovation?\n\nYou get disruption.\n\nWhat happens when disruption meets execution?\n\nYou get February 14th.",
+    scheduledDate: new Date('2026-02-07'),
     scheduledTime: 'PM',
     status: 'draft',
     platform: 'x',
+    mediaNote: "Abstract tech-meets-gaming visual with dice transforming into digital pixels, dark purple aesthetic, futuristic",
+    mediaUrl: '/media/post12-x.png',
     isThread: true,
-    mediaUrl: '/media/post12-hire-fire.png',
-    selfReply: "The sign I ignored: when you're relieved they called in sick. If you feel that, you already know."
+    selfReply: undefined
   },
-  // THURSDAY FEB 6
   {
     id: '13',
-    text: "Hot take: Golf is the best networking tool in business.\n\n4 hours.\nNo phones.\nNo distractions.\nJust real conversation.\n\nMore deals get done on the course than in boardrooms.\n\nGolfers — what's the best business relationship you built on the course?",
-    scheduledDate: new Date('2026-02-06'),
+    text: "From yesterday's Startups & Suits recording:\n\n\"The difference between founders who scale and founders who fail isn't intelligence. It's not even execution.\n\nIt's knowing when to whisper and when to roar.\"\n\nMost founders roar too early. They announce before they build. They celebrate before they ship. They talk before they have something worth talking about.\n\nThe best founders I know whispered for years. Then, when the moment was right, their roar changed everything.\n\nSilence is strategy. Until it's not.",
+    scheduledDate: new Date('2026-02-08'),
     scheduledTime: 'AM',
     status: 'draft',
-    platform: 'x',
-    mediaNote: '📸 YOUR PHOTO: On the golf course',
-    selfReply: "Not a golfer? Doesn't matter. Find YOUR version of this. Something that forces real conversation without screens."
+    platform: 'linkedin',
+    mediaNote: "Professional podcast recording setup in dramatic lighting, microphones casting long shadows, purple and black aesthetic",
+    mediaUrl: '/media/post13-linkedin.png',
+    isThread: false,
+    selfReply: undefined
   },
   {
     id: '14',
-    text: "One week.\n\n7 days until we flip the switch.\n\nTwo years of building.\nThousands of hours.\nCountless pivots.\nMoments of doubt.\n\nNext Friday, it goes live.\n\nDrop a 🚀 if you're building something too.",
-    scheduledDate: new Date('2026-02-06'),
+    text: "Six days.",
+    scheduledDate: new Date('2026-02-08'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Minimalist countdown design with the number 6 in elegant typography, dark background with subtle purple glow",
+    mediaUrl: '/media/post14-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '15',
+    text: "Unpopular opinion: MVPs are overrated.\n\nBuild something people can't live without, not something they can barely live with.\n\nThe minimum isn't where magic happens.",
+    scheduledDate: new Date('2026-02-08'),
     scheduledTime: 'PM',
     status: 'draft',
     platform: 'x',
-    mediaUrl: '/media/post14-7-days.png',
-    selfReply: "I'll be documenting the entire launch week. Follow along if you want to see behind the scenes of a crypto casino launch."
+    mediaNote: "Comparison visual showing basic vs refined product design, dark aesthetic with purple accents highlighting the difference",
+    mediaUrl: '/media/post15-x.png',
+    isThread: false,
+    selfReply: "Magic happens in the details everyone else skips."
   },
+  {
+    id: '16',
+    text: "Testing something that doesn't exist yet.",
+    scheduledDate: new Date('2026-02-09'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Abstract shot of code on multiple screens, hands typing in shadows, mysterious testing environment with purple lighting",
+    mediaUrl: '/media/post16-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '17',
+    text: "Sunday strategy sessions.\n\nThe work that matters happens when the world isn't watching.",
+    scheduledDate: new Date('2026-02-09'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Elegant workspace setup on Sunday evening, minimalist design with warm purple lighting, strategic planning atmosphere",
+    mediaUrl: '/media/post17-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '18',
+    text: "Every industry has its moment.\n\nMusic had Spotify.\nTransportation had Uber.\nPayments had PayPal.\n\nGaming is having its moment now.\n\nThe question isn't whether the transformation will happen. The question is who will lead it.\n\nThis week, you'll find out who we think should lead it.\n\n(Spoiler: It's not who you think.)",
+    scheduledDate: new Date('2026-02-09'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'facebook',
+    mediaNote: "Conceptual image showing gaming industry evolution, retro to modern transition, dark theme with purple technological elements",
+    mediaUrl: '/media/post18-facebook.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '19',
+    text: "Four days until the industry changes.",
+    scheduledDate: new Date('2026-02-10'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Countdown visual with number 4, abstract gaming elements morphing in dark purple atmosphere",
+    mediaUrl: '/media/post19-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '20',
+    text: "Final preparations look like controlled chaos.",
+    scheduledDate: new Date('2026-02-10'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Behind-scenes shot of a launch war room, multiple screens, organized chaos, purple ambient lighting, intense preparation",
+    mediaUrl: '/media/post20-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '21',
+    text: "The crypto space has a gambling problem.\n\nWe built a gambling space with a crypto solution.\n\nPerspective is everything.",
+    scheduledDate: new Date('2026-02-11'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Inverse perspective visual, showing the same concept from different angles, dark purple design with tech elements",
+    mediaUrl: '/media/post21-x.png',
+    isThread: false,
+    selfReply: "Sometimes you have to flip the script to see the picture."
+  },
+  {
+    id: '22',
+    text: "Three days from now, we launch something that's been three years in the making.\n\nNot because it took three years to build.\nBut because it took three years to understand what should be built.\n\nThe difference between shipping fast and shipping right is the difference between having users and having customers.\n\nWe chose customers.\n\nIn a world obsessed with speed, patience becomes a competitive advantage.\n\nSee you Friday.",
+    scheduledDate: new Date('2026-02-11'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'linkedin',
+    mediaNote: "Hourglass with gaming elements flowing through it, representing time and patience in development, dark aesthetic",
+    mediaUrl: '/media/post22-linkedin.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '23',
+    text: "Dubai skyline.\nMiami energy.\nBarcelona soul.\nSanta Cruz clarity.\n\nBuilt everywhere.\nLaunched from anywhere.\n\nFriday.",
+    scheduledDate: new Date('2026-02-11'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Artistic collage of all four cities connected by digital lines, representing global development, purple color scheme",
+    mediaUrl: '/media/post23-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '24',
+    text: "48 hours.",
+    scheduledDate: new Date('2026-02-12'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Cinematic close-up of a timer counting down, dramatic lighting with purple glow, anticipation building",
+    mediaUrl: '/media/post24-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '25',
+    text: "The best launches feel inevitable in hindsight.\n\nThey feel impossible until they happen.\n\nThen they feel inevitable.\n\nTomorrow you'll understand why we waited.",
+    scheduledDate: new Date('2026-02-12'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Abstract timeline visualization showing the progression from impossible to inevitable, dark purple design",
+    mediaUrl: '/media/post25-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '26',
+    text: "24 hours.\n\nThe calm before the storm isn't calm at all.\n\nIt's electric.",
+    scheduledDate: new Date('2026-02-13'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Lightning in the distance over a dark city skyline, electric anticipation, purple storm clouds",
+    mediaUrl: '/media/post26-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '27',
+    text: "Final systems check. Everything looks... perfect.",
+    scheduledDate: new Date('2026-02-13'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "High-tech control room with all green status lights, sleek interfaces, purple accent lighting, perfection moment",
+    mediaUrl: '/media/post27-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '28',
+    text: "Today.\n\nDrizzle.",
+    scheduledDate: new Date('2026-02-14'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Bold, cinematic logo reveal for Drizzle, purple and black premium design, launch day energy",
+    mediaUrl: '/media/post28-x.png',
+    isThread: false,
+    selfReply: "The future of gaming starts now."
+  },
+  {
+    id: '29',
+    text: "Today we launched Drizzle.\n\nNot just a product. A perspective.\n\nFor three years, we've watched an industry optimize for the wrong metrics. Speed over substance. Growth over experience. Volume over value.\n\nWe built the alternative.\n\nDrizzle isn't just crypto gaming. It's gaming, elevated. It's crypto, refined. It's what happens when you start with the experience and work backward to the technology.\n\nThe industry needed this. We just happened to be in position to build it.\n\nSometimes the best disruption doesn't announce itself. It just arrives.\n\nWelcome to the future.",
+    scheduledDate: new Date('2026-02-14'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'linkedin',
+    mediaNote: "Product launch image showing Drizzle interface in elegant, premium styling, dark aesthetic with purple accents",
+    mediaUrl: '/media/post29-linkedin.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '30',
+    text: "Three years of building. One moment of truth. Drizzle is live.",
+    scheduledDate: new Date('2026-02-14'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Celebration shot of the team in a darkened room with screens showing Drizzle is live, purple celebratory lighting",
+    mediaUrl: '/media/post30-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '31',
+    text: "Three years ago, we started building something that didn't exist.\n\nToday, it does.\n\nDrizzle represents more than a product launch. It represents a philosophy: that the best experiences happen when technology disappears into the background.\n\nThe crypto gaming space has been defined by complexity, by friction, by barriers between players and play.\n\nWe eliminated the barriers. What remains is pure experience.\n\nThis is what we've been building in the shadows. This is why we waited.\n\nThe future doesn't announce itself with press releases. It arrives when you're ready.\n\nWe're ready. The question is: are you?\n\nDrizzle is live.",
+    scheduledDate: new Date('2026-02-14'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'facebook',
+    mediaNote: "Premium product showcase image of Drizzle platform, showcasing sleek interface design, professional photography",
+    mediaUrl: '/media/post31-facebook.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '32',
+    text: "Day 1 post-launch:\n\nThe real work starts now.\n\nBuilding is one thing. Scaling is everything.",
+    scheduledDate: new Date('2026-02-15'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Abstract visualization of scaling systems, showing growth and expansion, purple tech aesthetic",
+    mediaUrl: '/media/post32-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '33',
+    text: "The view after launch day. Still working. Always building.",
+    scheduledDate: new Date('2026-02-15'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Contemplative shot of founder looking out window the day after launch, coffee in hand, purple hour lighting",
+    mediaUrl: '/media/post33-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '34',
+    text: "Launching is just the beginning.\n\nEverything before launch is preparation.\nEverything after launch is execution.\n\nGuess which one matters more?",
+    scheduledDate: new Date('2026-02-16'),
+    scheduledTime: 'AM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Two-panel visual showing preparation vs execution phases, emphasizing the ongoing nature of building",
+    mediaUrl: '/media/post34-x.png',
+    isThread: false,
+    selfReply: "The work that counts happens when everyone's watching."
+  },
+  {
+    id: '35',
+    text: "48 hours post-Drizzle launch.\n\nThe messages are overwhelming. The response is beyond what we projected. The momentum is real.\n\nBut here's what nobody talks about in the launch retrospectives:\n\nThe hardest part isn't building something people want.\nIt's scaling something people love.\n\nLaunching creates attention. Building creates retention.\n\nWe've done the first. Now comes the real test.\n\nBuilding at scale, with the world watching, is where legends are made or broken.\n\nStay tuned.",
+    scheduledDate: new Date('2026-02-16'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'linkedin',
+    mediaNote: "Sophisticated analytics dashboard showing growth metrics, professional setting with purple accent lighting",
+    mediaUrl: '/media/post35-linkedin.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '36',
+    text: "Week one: Complete.\n\nWeek two: Just getting started.\n\nBuilding never stops.",
+    scheduledDate: new Date('2026-02-16'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'x',
+    mediaNote: "Elegant timeline visualization showing continuous building cycle, purple and black aesthetic",
+    mediaUrl: '/media/post36-x.png',
+    isThread: false,
+    selfReply: undefined
+  },
+  {
+    id: '37',
+    text: "Two weeks ago, we had a secret. Today, we have a movement.",
+    scheduledDate: new Date('2026-02-16'),
+    scheduledTime: 'PM',
+    status: 'draft',
+    platform: 'instagram',
+    mediaNote: "Before/after style image showing empty workspace transitioning to active community, growth and transformation theme",
+    mediaUrl: '/media/post37-instagram.png',
+    isThread: false,
+    selfReply: undefined
+  }
 ];
-
 // X/Twitter Logo SVG
 const XLogo = () => (
   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
@@ -209,9 +509,40 @@ const XLogo = () => (
   </svg>
 );
 
+// LinkedIn Logo SVG
+const LinkedInLogo = () => (
+  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-[#0a66c2]">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+);
+
+// Instagram Logo SVG
+const InstagramLogo = () => (
+  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-[#e4405f]">
+    <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.757-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+  </svg>
+);
+
+// Facebook Logo SVG
+const FacebookLogo = () => (
+  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-[#1877f2]">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+);
+
+// Platform logo selector
+const PlatformLogo = ({ platform }: { platform: 'x' | 'linkedin' | 'instagram' | 'facebook' }) => {
+  switch (platform) {
+    case 'linkedin': return <LinkedInLogo />;
+    case 'instagram': return <InstagramLogo />;
+    case 'facebook': return <FacebookLogo />;
+    default: return <XLogo />;
+  }
+};
+
 export default function ContentCalendar() {
   const [posts, setPosts] = useState<ContentPost[]>([]);
-  const [weekStart, setWeekStart] = useState(startOfWeek(new Date('2026-01-31'), { weekStartsOn: 5 }));
+  const [weekStart, setWeekStart] = useState(startOfWeek(new Date('2026-02-03'), { weekStartsOn: 1 }));
   const [selectedPost, setSelectedPost] = useState<ContentPost | null>(null);
   const [posting, setPosting] = useState<string | null>(null);
   const [editingPost, setEditingPost] = useState<ContentPost | null>(null);
@@ -224,7 +555,7 @@ export default function ContentCalendar() {
 
   useEffect(() => {
     // Load posts
-    const saved = localStorage.getItem('content-calendar-v4');
+    const saved = localStorage.getItem('content-calendar-v5');
     if (saved) {
       const parsed = JSON.parse(saved);
       setPosts(parsed.map((p: ContentPost) => ({
@@ -233,7 +564,7 @@ export default function ContentCalendar() {
       })));
     } else {
       setPosts(initialPosts);
-      localStorage.setItem('content-calendar-v4', JSON.stringify(initialPosts));
+      localStorage.setItem('content-calendar-v5', JSON.stringify(initialPosts));
     }
 
     // Load feedback
@@ -252,7 +583,7 @@ export default function ContentCalendar() {
 
   const savePosts = (newPosts: ContentPost[]) => {
     setPosts(newPosts);
-    localStorage.setItem('content-calendar-v4', JSON.stringify(newPosts));
+    localStorage.setItem('content-calendar-v5', JSON.stringify(newPosts));
   };
 
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
@@ -270,10 +601,68 @@ export default function ContentCalendar() {
   const handlePost = async (post: ContentPost) => {
     setPosting(post.id);
     try {
+      let mediaIds: string[] = [];
+      
+      // If post has media, upload it first
+      if (post.mediaUrl) {
+        try {
+          // Convert relative URL to absolute
+          const mediaUrl = post.mediaUrl.startsWith('http') 
+            ? post.mediaUrl 
+            : `${window.location.origin}${post.mediaUrl}`;
+          
+          // Fetch the image
+          const imgResponse = await fetch(mediaUrl);
+          if (!imgResponse.ok) {
+            throw new Error(`Failed to fetch image: ${imgResponse.status}`);
+          }
+          
+          const blob = await imgResponse.blob();
+          
+          // Check file size (X limit is 5MB for images)
+          const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+          if (blob.size > MAX_SIZE) {
+            console.warn(`Image too large (${(blob.size / 1024 / 1024).toFixed(1)}MB). X limit is 5MB. Posting without media.`);
+            alert(`Image too large (${(blob.size / 1024 / 1024).toFixed(1)}MB). X limit is 5MB. Post will be sent without image.`);
+          } else {
+            // Convert to base64
+            const base64 = await new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.readAsDataURL(blob);
+            });
+            
+            // Upload to X
+            const mediaResponse = await fetch('/api/x/media', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                media: base64,
+                mimeType: blob.type 
+              }),
+            });
+            const mediaData = await mediaResponse.json();
+            if (mediaData.success && mediaData.mediaId) {
+              mediaIds.push(mediaData.mediaId);
+            } else {
+              console.error('Media upload failed:', mediaData.error);
+              alert(`Media upload failed: ${mediaData.error}`);
+            }
+          }
+        } catch (mediaErr) {
+          console.error('Failed to upload media:', mediaErr);
+          alert(`Failed to upload media: ${mediaErr instanceof Error ? mediaErr.message : 'Unknown error'}`);
+          // Continue without media rather than failing the whole post
+        }
+      }
+      
       const response = await fetch('/api/x/post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: post.text }),
+        body: JSON.stringify({ 
+          text: post.text,
+          mediaIds: mediaIds.length > 0 ? mediaIds : undefined
+        }),
       });
       const data = await response.json();
       if (data.success) {
@@ -283,9 +672,13 @@ export default function ContentCalendar() {
         savePosts(updated);
         setSelectedPost(null);
         setEditingPost(null);
+      } else {
+        console.error('Post failed:', data.error);
+        alert(`Post failed: ${data.error}`);
       }
     } catch (err) {
       console.error('Failed to post:', err);
+      alert(`Failed to post: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setPosting(null);
     }
@@ -296,6 +689,14 @@ export default function ContentCalendar() {
     setSelectedPost(null);
     setEditingPost(null);
     setDeleteConfirm(null);
+  };
+
+  const handleReset = (id: string) => {
+    const updated = posts.map(p => 
+      p.id === id ? { ...p, status: 'scheduled' as const } : p
+    );
+    savePosts(updated);
+    setSelectedPost(updated.find(p => p.id === id) || null);
   };
 
   const handleSaveEdit = (updatedPost: ContentPost) => {
@@ -727,6 +1128,7 @@ export default function ContentCalendar() {
                 onEdit={() => setEditingPost(selectedPost)}
                 onFeedback={() => setFeedbackPost(selectedPost)}
                 onResolveFeedback={handleResolveFeedback}
+                onReset={() => handleReset(selectedPost.id)}
                 posting={posting === selectedPost.id}
                 onClose={() => setSelectedPost(null)}
               />
@@ -935,7 +1337,7 @@ function TweetCardMobile({
           </div>
         </div>
         <div className="text-white">
-          <XLogo />
+          <PlatformLogo platform={post.platform} />
         </div>
       </div>
 
@@ -1087,7 +1489,7 @@ function TweetCard({
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#bf5af2]/20 text-[#bf5af2]">🧵</span>
             )}
             <div className="text-white">
-              <XLogo />
+              <PlatformLogo platform={post.platform} />
             </div>
           </div>
         </div>
@@ -1262,6 +1664,7 @@ function TweetPreview({
   onEdit,
   onFeedback,
   onResolveFeedback,
+  onReset,
   posting,
   onClose
 }: { 
@@ -1272,6 +1675,7 @@ function TweetPreview({
   onEdit: () => void;
   onFeedback: () => void;
   onResolveFeedback: (id: string) => void;
+  onReset: () => void;
   posting: boolean;
   onClose: () => void;
 }) {
@@ -1393,7 +1797,7 @@ function TweetPreview({
       )}
 
       {/* Actions */}
-      {post.status !== 'posted' && (
+      {post.status !== 'posted' ? (
         <div className="flex flex-wrap items-center gap-2 p-3 sm:p-4 border-t border-white/10 bg-white/[0.02]">
           <button
             onClick={() => onDelete(post.id)}
@@ -1432,6 +1836,26 @@ function TweetPreview({
                 Post
               </>
             )}
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center gap-2 p-3 sm:p-4 border-t border-white/10 bg-white/[0.02]">
+          <div className="flex items-center gap-2 text-[#30d158]">
+            <CheckCircle className="w-4 h-4" />
+            <span className="text-sm font-medium">Posted</span>
+          </div>
+          <div className="flex-1" />
+          <button
+            onClick={onReset}
+            className="px-3 py-2 rounded-full border border-[#ff9500]/30 text-[#ff9500] hover:bg-[#ff9500]/10 transition-colors text-xs sm:text-sm font-medium"
+          >
+            Reset to Draft
+          </button>
+          <button
+            onClick={() => onDelete(post.id)}
+            className="px-3 py-2 rounded-full border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors text-xs sm:text-sm font-medium"
+          >
+            Delete
           </button>
         </div>
       )}
