@@ -22,17 +22,37 @@ function isImageFeedback(message: string): boolean {
   return imageKeywords.some(kw => lowerMessage.includes(kw));
 }
 
-// Dispatch task to agent swarm
-async function dispatchToAgent(agent: string, task: string) {
+// Dispatch task to agent - calls the actual agent execution endpoint
+async function dispatchToAgent(
+  agent: string,
+  task: string,
+  context?: { postId?: string; postText?: string; mediaNote?: string }
+) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
                     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
-    await fetch(`${baseUrl}/api/agents?dispatch=true`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ agent, task }),
-    });
+    // For Aurora, call her execution endpoint directly
+    if (agent === 'aurora') {
+      // Fire and forget - don't await so the feedback API returns quickly
+      fetch(`${baseUrl}/api/agents/aurora`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          postId: context?.postId,
+          feedback: task,
+          originalPrompt: context?.mediaNote,
+          postText: context?.postText,
+        }),
+      }).catch(err => console.error('Aurora execution error:', err));
+    } else {
+      // For other agents, just update their status (placeholder)
+      await fetch(`${baseUrl}/api/agents?dispatch=true`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent, task }),
+      });
+    }
   } catch (err) {
     console.error('Failed to dispatch to agent:', err);
   }
@@ -84,8 +104,12 @@ export async function POST(request: Request) {
     let dispatchedTo: string | undefined;
     if (isImageFeedback(message)) {
       dispatchedTo = 'aurora';
-      const task = `Content feedback for post ${postId}: "${message}"${mediaNote ? ` | Original image brief: ${mediaNote}` : ''}${postText ? ` | Post text: ${postText.substring(0, 100)}...` : ''}`;
-      await dispatchToAgent('aurora', task);
+      // Dispatch to Aurora with full context for image regeneration
+      await dispatchToAgent('aurora', message, {
+        postId,
+        postText,
+        mediaNote,
+      });
     }
 
     const newFeedback = {
