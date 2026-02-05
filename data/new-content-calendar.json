@@ -1,0 +1,490 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "platform": "x",
+      "scheduledDate": "2026-02-03",
+      "scheduledTime": "AM",
+      "text": "Building in the shadows while others build in the spotlight.",
+      "mediaPrompt": "Dark silhouette of a figure working at a computer screen in a dimly lit room, purple glow from multiple monitors, cinematic lighting",
+      "selfReply": "The noise fades when you focus on the work.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post1-x.png"
+    },
+    {
+      "id": "2",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-03",
+      "scheduledTime": "PM",
+      "text": "Some conversations happen in coffee shops. Others happen in boardrooms at 2am.",
+      "mediaPrompt": "Moody shot of empty boardroom with city lights visible through floor-to-ceiling windows, single laptop open casting purple light, dark aesthetic",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "buildinpublic",
+        "founder",
+        "startups"
+      ],
+      "mediaUrl": "/media/post2-instagram.png"
+    },
+    {
+      "id": "3",
+      "platform": "x",
+      "scheduledDate": "2026-02-04",
+      "scheduledTime": "AM",
+      "text": "The difference between a startup and a lifestyle business:\n\nOne scales you. The other scales with you.\n\nChoose wisely.",
+      "mediaPrompt": "Abstract geometric shapes in dark purple and black, representing growth and scale, minimalist design",
+      "selfReply": "Most people optimize for the wrong variable.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post3-x.png"
+    },
+    {
+      "id": "4",
+      "platform": "linkedin",
+      "scheduledDate": "2026-02-04",
+      "scheduledTime": "PM",
+      "text": "After recording 100+ episodes of Startups & Suits, one pattern emerges:\n\nThe founders who win don't talk about winning.\nThey talk about building.\n\nThere's a difference between being in the game and being the game.\n\nThe best players you've never heard of are busy creating the future while everyone else is busy talking about it.\n\nWhat are you building that no one knows about yet?",
+      "mediaPrompt": "Dark, cinematic shot of a recording studio with professional microphones, warm purple lighting, mysterious atmosphere",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post4-linkedin.png"
+    },
+    {
+      "id": "5",
+      "platform": "x",
+      "scheduledDate": "2026-02-04",
+      "scheduledTime": "PM",
+      "text": "Barcelona rooftops hit different when you're debugging code at sunset.",
+      "mediaPrompt": "Silhouette of someone with laptop on a Barcelona rooftop terrace at golden hour, purple and orange sky, moody urban landscape",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post5-x.png"
+    },
+    {
+      "id": "6",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-05",
+      "scheduledTime": "AM",
+      "text": "The view from the room where decisions happen.",
+      "mediaPrompt": "Artistic shot from inside looking out through venetian blinds at city skyline, dramatic shadows and purple lighting, film noir aesthetic",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "perspective",
+        "founder",
+        "decisions"
+      ],
+      "mediaUrl": "/media/post6-instagram.png"
+    },
+    {
+      "id": "7",
+      "platform": "x",
+      "scheduledDate": "2026-02-05",
+      "scheduledTime": "PM",
+      "text": "Hot take: The best product launches happen when no one expects them.\n\nSurprise is a feature, not a bug.",
+      "mediaPrompt": "Dark abstract design with hidden elements becoming visible, purple and black gradient, mysterious reveal concept",
+      "selfReply": "Anticipation > announcement",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post7-x.png"
+    },
+    {
+      "id": "8",
+      "platform": "facebook",
+      "scheduledDate": "2026-02-06",
+      "scheduledTime": "AM",
+      "text": "Three years ago, I was building something that didn't exist.\n\nToday, the market is finally ready for what we've been creating in silence.\n\nTiming isn't everything\u2014it's the only thing.\n\nThe gap between vision and reality is where fortunes are made. Most people see the gap and retreat. A few see it and build bridges.\n\nWhich type are you?",
+      "mediaPrompt": "Conceptual image of a bridge appearing out of fog, connecting two landscapes, dark moody atmosphere with purple lighting",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post8-facebook.png"
+    },
+    {
+      "id": "9",
+      "platform": "x",
+      "scheduledDate": "2026-02-06",
+      "scheduledTime": "AM",
+      "text": "Santa Cruz mornings.\nMiami nights.\nBarcelona afternoons.\nDubai possibilities.\n\nLocation is a tool, not a destination.",
+      "mediaPrompt": "Split screen collage showing glimpses of all four cities in moody, cinematic style with purple color grading",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post9-x.png"
+    },
+    {
+      "id": "10",
+      "platform": "x",
+      "scheduledDate": "2026-02-06",
+      "scheduledTime": "PM",
+      "text": "The most dangerous advice: \"Follow your passion.\"\n\nBetter advice: \"Build your obsession.\"\n\nPassion fades. Obsession compounds.",
+      "mediaPrompt": "Abstract visualization of compound growth, dark background with purple ascending lines, minimalist and powerful",
+      "selfReply": "Obsession is passion with a business plan.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post10-x.png"
+    },
+    {
+      "id": "11",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-07",
+      "scheduledTime": "AM",
+      "text": "Behind every overnight success is a decade of nights like this.",
+      "mediaPrompt": "Time-lapse style image showing multiple coffee cups and laptop screens through the night, purple ambient lighting, dedication concept",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "grind",
+        "buildingthefuture",
+        "founder"
+      ],
+      "mediaUrl": "/media/post11-instagram.png"
+    },
+    {
+      "id": "12",
+      "platform": "x",
+      "scheduledDate": "2026-02-07",
+      "scheduledTime": "PM",
+      "text": "What happens when gambling meets technology?\n\nYou get an industry.\n\nWhat happens when an industry meets innovation?\n\nYou get disruption.\n\nWhat happens when disruption meets execution?\n\nYou get February 14th.",
+      "mediaPrompt": "Abstract tech-meets-gaming visual with dice transforming into digital pixels, dark purple aesthetic, futuristic",
+      "selfReply": "",
+      "isThread": true,
+      "hashtags": [],
+      "mediaUrl": "/media/post12-x.png"
+    },
+    {
+      "id": "13",
+      "platform": "linkedin",
+      "scheduledDate": "2026-02-08",
+      "scheduledTime": "AM",
+      "text": "From yesterday's Startups & Suits recording:\n\n\"The difference between founders who scale and founders who fail isn't intelligence. It's not even execution.\n\nIt's knowing when to whisper and when to roar.\"\n\nMost founders roar too early. They announce before they build. They celebrate before they ship. They talk before they have something worth talking about.\n\nThe best founders I know whispered for years. Then, when the moment was right, their roar changed everything.\n\nSilence is strategy. Until it's not.",
+      "mediaPrompt": "Professional podcast recording setup in dramatic lighting, microphones casting long shadows, purple and black aesthetic",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post13-linkedin.png"
+    },
+    {
+      "id": "14",
+      "platform": "x",
+      "scheduledDate": "2026-02-08",
+      "scheduledTime": "AM",
+      "text": "Six days.",
+      "mediaPrompt": "Minimalist countdown design with the number 6 in elegant typography, dark background with subtle purple glow",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post14-x.png"
+    },
+    {
+      "id": "15",
+      "platform": "x",
+      "scheduledDate": "2026-02-08",
+      "scheduledTime": "PM",
+      "text": "Unpopular opinion: MVPs are overrated.\n\nBuild something people can't live without, not something they can barely live with.\n\nThe minimum isn't where magic happens.",
+      "mediaPrompt": "Comparison visual showing basic vs refined product design, dark aesthetic with purple accents highlighting the difference",
+      "selfReply": "Magic happens in the details everyone else skips.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post15-x.png"
+    },
+    {
+      "id": "16",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-09",
+      "scheduledTime": "AM",
+      "text": "Testing something that doesn't exist yet.",
+      "mediaPrompt": "Abstract shot of code on multiple screens, hands typing in shadows, mysterious testing environment with purple lighting",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "stealth",
+        "innovation",
+        "comingsoon"
+      ],
+      "mediaUrl": "/media/post16-instagram.png"
+    },
+    {
+      "id": "17",
+      "platform": "x",
+      "scheduledDate": "2026-02-09",
+      "scheduledTime": "PM",
+      "text": "Sunday strategy sessions.\n\nThe work that matters happens when the world isn't watching.",
+      "mediaPrompt": "Elegant workspace setup on Sunday evening, minimalist design with warm purple lighting, strategic planning atmosphere",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post17-x.png"
+    },
+    {
+      "id": "18",
+      "platform": "facebook",
+      "scheduledDate": "2026-02-09",
+      "scheduledTime": "PM",
+      "text": "Every industry has its moment.\n\nMusic had Spotify.\nTransportation had Uber.\nPayments had PayPal.\n\nGaming is having its moment now.\n\nThe question isn't whether the transformation will happen. The question is who will lead it.\n\nThis week, you'll find out who we think should lead it.\n\n(Spoiler: It's not who you think.)",
+      "mediaPrompt": "Conceptual image showing gaming industry evolution, retro to modern transition, dark theme with purple technological elements",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post18-facebook.png"
+    },
+    {
+      "id": "19",
+      "platform": "x",
+      "scheduledDate": "2026-02-10",
+      "scheduledTime": "AM",
+      "text": "Four days until the industry changes.",
+      "mediaPrompt": "Countdown visual with number 4, abstract gaming elements morphing in dark purple atmosphere",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post19-x.png"
+    },
+    {
+      "id": "20",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-10",
+      "scheduledTime": "PM",
+      "text": "Final preparations look like controlled chaos.",
+      "mediaPrompt": "Behind-scenes shot of a launch war room, multiple screens, organized chaos, purple ambient lighting, intense preparation",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "launchweek",
+        "prepared",
+        "almosttime"
+      ],
+      "mediaUrl": "/media/post20-instagram.png"
+    },
+    {
+      "id": "21",
+      "platform": "x",
+      "scheduledDate": "2026-02-11",
+      "scheduledTime": "AM",
+      "text": "The crypto space has a gambling problem.\n\nWe built a gambling space with a crypto solution.\n\nPerspective is everything.",
+      "mediaPrompt": "Inverse perspective visual, showing the same concept from different angles, dark purple design with tech elements",
+      "selfReply": "Sometimes you have to flip the script to see the picture.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post21-x.png"
+    },
+    {
+      "id": "22",
+      "platform": "linkedin",
+      "scheduledDate": "2026-02-11",
+      "scheduledTime": "PM",
+      "text": "Three days from now, we launch something that's been three years in the making.\n\nNot because it took three years to build.\nBut because it took three years to understand what should be built.\n\nThe difference between shipping fast and shipping right is the difference between having users and having customers.\n\nWe chose customers.\n\nIn a world obsessed with speed, patience becomes a competitive advantage.\n\nSee you Friday.",
+      "mediaPrompt": "Hourglass with gaming elements flowing through it, representing time and patience in development, dark aesthetic",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post22-linkedin.png"
+    },
+    {
+      "id": "23",
+      "platform": "x",
+      "scheduledDate": "2026-02-11",
+      "scheduledTime": "PM",
+      "text": "Dubai skyline.\nMiami energy.\nBarcelona soul.\nSanta Cruz clarity.\n\nBuilt everywhere.\nLaunched from anywhere.\n\nFriday.",
+      "mediaPrompt": "Artistic collage of all four cities connected by digital lines, representing global development, purple color scheme",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post23-x.png"
+    },
+    {
+      "id": "24",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-12",
+      "scheduledTime": "AM",
+      "text": "48 hours.",
+      "mediaPrompt": "Cinematic close-up of a timer counting down, dramatic lighting with purple glow, anticipation building",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "countdown",
+        "almosttime",
+        "ready"
+      ],
+      "mediaUrl": "/media/post24-instagram.png"
+    },
+    {
+      "id": "25",
+      "platform": "x",
+      "scheduledDate": "2026-02-12",
+      "scheduledTime": "PM",
+      "text": "The best launches feel inevitable in hindsight.\n\nThey feel impossible until they happen.\n\nThen they feel inevitable.\n\nTomorrow you'll understand why we waited.",
+      "mediaPrompt": "Abstract timeline visualization showing the progression from impossible to inevitable, dark purple design",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post25-x.png"
+    },
+    {
+      "id": "26",
+      "platform": "x",
+      "scheduledDate": "2026-02-13",
+      "scheduledTime": "AM",
+      "text": "24 hours.\n\nThe calm before the storm isn't calm at all.\n\nIt's electric.",
+      "mediaPrompt": "Lightning in the distance over a dark city skyline, electric anticipation, purple storm clouds",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post26-x.png"
+    },
+    {
+      "id": "27",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-13",
+      "scheduledTime": "PM",
+      "text": "Final systems check. Everything looks... perfect.",
+      "mediaPrompt": "High-tech control room with all green status lights, sleek interfaces, purple accent lighting, perfection moment",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "systemsgo",
+        "perfect",
+        "tomorrow"
+      ],
+      "mediaUrl": "/media/post27-instagram.png"
+    },
+    {
+      "id": "28",
+      "platform": "x",
+      "scheduledDate": "2026-02-14",
+      "scheduledTime": "AM",
+      "text": "Today.\n\nDrizzle.",
+      "mediaPrompt": "Bold, cinematic logo reveal for Drizzle, purple and black premium design, launch day energy",
+      "selfReply": "The future of gaming starts now.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post28-x.png"
+    },
+    {
+      "id": "29",
+      "platform": "linkedin",
+      "scheduledDate": "2026-02-14",
+      "scheduledTime": "PM",
+      "text": "Today we launched Drizzle.\n\nNot just a product. A perspective.\n\nFor three years, we've watched an industry optimize for the wrong metrics. Speed over substance. Growth over experience. Volume over value.\n\nWe built the alternative.\n\nDrizzle isn't just crypto gaming. It's gaming, elevated. It's crypto, refined. It's what happens when you start with the experience and work backward to the technology.\n\nThe industry needed this. We just happened to be in position to build it.\n\nSometimes the best disruption doesn't announce itself. It just arrives.\n\nWelcome to the future.",
+      "mediaPrompt": "Product launch image showing Drizzle interface in elegant, premium styling, dark aesthetic with purple accents",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post29-linkedin.png"
+    },
+    {
+      "id": "30",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-14",
+      "scheduledTime": "PM",
+      "text": "Three years of building. One moment of truth. Drizzle is live.",
+      "mediaPrompt": "Celebration shot of the team in a darkened room with screens showing Drizzle is live, purple celebratory lighting",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "drizzle",
+        "live",
+        "buildinpublic",
+        "launched"
+      ],
+      "mediaUrl": "/media/post30-instagram.png"
+    },
+    {
+      "id": "31",
+      "platform": "facebook",
+      "scheduledDate": "2026-02-14",
+      "scheduledTime": "PM",
+      "text": "Three years ago, we started building something that didn't exist.\n\nToday, it does.\n\nDrizzle represents more than a product launch. It represents a philosophy: that the best experiences happen when technology disappears into the background.\n\nThe crypto gaming space has been defined by complexity, by friction, by barriers between players and play.\n\nWe eliminated the barriers. What remains is pure experience.\n\nThis is what we've been building in the shadows. This is why we waited.\n\nThe future doesn't announce itself with press releases. It arrives when you're ready.\n\nWe're ready. The question is: are you?\n\nDrizzle is live.",
+      "mediaPrompt": "Premium product showcase image of Drizzle platform, showcasing sleek interface design, professional photography",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post31-facebook.png"
+    },
+    {
+      "id": "32",
+      "platform": "x",
+      "scheduledDate": "2026-02-15",
+      "scheduledTime": "AM",
+      "text": "Day 1 post-launch:\n\nThe real work starts now.\n\nBuilding is one thing. Scaling is everything.",
+      "mediaPrompt": "Abstract visualization of scaling systems, showing growth and expansion, purple tech aesthetic",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post32-x.png"
+    },
+    {
+      "id": "33",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-15",
+      "scheduledTime": "PM",
+      "text": "The view after launch day. Still working. Always building.",
+      "mediaPrompt": "Contemplative shot of founder looking out window the day after launch, coffee in hand, purple hour lighting",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "postlaunch",
+        "keepbuilding",
+        "perspective"
+      ],
+      "mediaUrl": "/media/post33-instagram.png"
+    },
+    {
+      "id": "34",
+      "platform": "x",
+      "scheduledDate": "2026-02-16",
+      "scheduledTime": "AM",
+      "text": "Launching is just the beginning.\n\nEverything before launch is preparation.\nEverything after launch is execution.\n\nGuess which one matters more?",
+      "mediaPrompt": "Two-panel visual showing preparation vs execution phases, emphasizing the ongoing nature of building",
+      "selfReply": "The work that counts happens when everyone's watching.",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post34-x.png"
+    },
+    {
+      "id": "35",
+      "platform": "linkedin",
+      "scheduledDate": "2026-02-16",
+      "scheduledTime": "PM",
+      "text": "48 hours post-Drizzle launch.\n\nThe messages are overwhelming. The response is beyond what we projected. The momentum is real.\n\nBut here's what nobody talks about in the launch retrospectives:\n\nThe hardest part isn't building something people want.\nIt's scaling something people love.\n\nLaunching creates attention. Building creates retention.\n\nWe've done the first. Now comes the real test.\n\nBuilding at scale, with the world watching, is where legends are made or broken.\n\nStay tuned.",
+      "mediaPrompt": "Sophisticated analytics dashboard showing growth metrics, professional setting with purple accent lighting",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post35-linkedin.png"
+    },
+    {
+      "id": "36",
+      "platform": "x",
+      "scheduledDate": "2026-02-16",
+      "scheduledTime": "PM",
+      "text": "Week one: Complete.\n\nWeek two: Just getting started.\n\nBuilding never stops.",
+      "mediaPrompt": "Elegant timeline visualization showing continuous building cycle, purple and black aesthetic",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [],
+      "mediaUrl": "/media/post36-x.png"
+    },
+    {
+      "id": "37",
+      "platform": "instagram",
+      "scheduledDate": "2026-02-16",
+      "scheduledTime": "PM",
+      "text": "Two weeks ago, we had a secret. Today, we have a movement.",
+      "mediaPrompt": "Before/after style image showing empty workspace transitioning to active community, growth and transformation theme",
+      "selfReply": "",
+      "isThread": false,
+      "hashtags": [
+        "transformation",
+        "community",
+        "movement",
+        "drizzle"
+      ],
+      "mediaUrl": "/media/post37-instagram.png"
+    }
+  ]
+}

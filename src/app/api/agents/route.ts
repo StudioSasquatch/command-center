@@ -1,122 +1,123 @@
-import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+/**
+ * Agent Swarm API
+ *
+ * Endpoints:
+ * - GET  /api/agents          - Get current swarm state
+ * - POST /api/agents          - Update agent status
+ * - PUT  /api/agents          - Reset all agents to idle
+ * - POST /api/agents?dispatch - Dispatch task to agent (orchestrator)
+ */
 
-// Agent status - stored in memory for this serverless instance
-// Updates can happen via POST but won't persist across cold starts
-// For persistent updates: modify public/agent-status.json and redeploy
+import { NextRequest, NextResponse } from 'next/server';
+import {
+  getSwarmState,
+  updateAgentStatus,
+  updateMultipleAgents,
+  resetSwarm,
+  addAgent,
+  AgentStatus,
+} from '@/lib/agent-store';
+import { requireAuth, AuthError } from '@/lib/auth';
 
-interface AgentStatusData {
-  agents: {
-    [key: string]: {
-      status: 'idle' | 'working' | 'complete';
-      task: string | null;
-    };
-  };
-  lastUpdated: string | null;
-}
-
-const DEFAULT_STATUS: AgentStatusData = {
-  agents: {
-    noctis: { status: 'working', task: null },
-    aurora: { status: 'idle', task: null },
-    sage: { status: 'idle', task: null },
-    ada: { status: 'idle', task: null },
-    nova: { status: 'idle', task: null },
-  },
-  lastUpdated: null,
-};
-
-// In-memory store (resets on cold start)
-let memoryStore: AgentStatusData | null = null;
-
-async function getStatus(): Promise<AgentStatusData> {
-  // Return memory store if populated
-  if (memoryStore) {
-    return memoryStore;
-  }
-  
-  // Try to read from static file
-  try {
-    const filePath = path.join(process.cwd(), 'public', 'agent-status.json');
-    const data = await fs.readFile(filePath, 'utf-8');
-    const parsed = JSON.parse(data) as AgentStatusData;
-    parsed.agents.noctis.status = 'working'; // Noctis always active
-    memoryStore = parsed;
-    return parsed;
-  } catch {
-    memoryStore = { ...DEFAULT_STATUS };
-    return memoryStore;
-  }
-}
-
-// GET - Fetch current agent status
+// GET - Fetch current swarm state
 export async function GET() {
   try {
-    const status = await getStatus();
-    return NextResponse.json(status, {
+    const state = await getSwarmState();
+    return NextResponse.json(state, {
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     });
   } catch (error) {
-    console.error('Failed to read agent status:', error);
-    return NextResponse.json(DEFAULT_STATUS);
+    console.error('Failed to get swarm state:', error);
+    return NextResponse.json(
+      { error: 'Failed to get swarm state' },
+      { status: 500 }
+    );
   }
 }
 
-// POST - Update agent status (in-memory, resets on cold start)
-// For persistent updates, modify public/agent-status.json and redeploy
-export async function POST(request: Request) {
+// POST - Update agent status or dispatch task
+export async function POST(request: NextRequest) {
+  // Check for dispatch mode (requires auth)
+  const isDispatch = request.nextUrl.searchParams.get('dispatch') === 'true';
+
+  if (isDispatch) {
+    const authResult = requireAuth(request);
+    if (authResult instanceof AuthError) {
+      return authResult.toResponse();
+    }
+  }
+
   try {
     const body = await request.json();
-    const currentStatus = await getStatus();
-    
-    // Single agent update
+
+    // Dispatch task to agent
+    if (isDispatch && body.agent && body.task) {
+      // This would trigger the actual agent execution
+      // For now, just update status to 'working'
+      const state = await updateAgentStatus(body.agent, {
+        status: 'working',
+        task: body.task,
+        progress: 0,
+      });
+
+      return NextResponse.json({
+        success: true,
+        dispatched: true,
+        agent: body.agent,
+        task: body.task,
+        state,
+      });
+    }
+
+    // Single agent update: { agent: "trader", status: "working", task: "..." }
     if (body.agent && body.status) {
-      const agentName = body.agent.toLowerCase();
-      if (currentStatus.agents[agentName]) {
-        currentStatus.agents[agentName] = {
-          status: body.status,
-          task: body.task || null,
-        };
-      }
+      const state = await updateAgentStatus(body.agent, {
+        status: body.status as AgentStatus,
+        task: body.task || null,
+        progress: body.progress,
+        error: body.error,
+      });
+
+      return NextResponse.json({ success: true, ...state });
     }
-    
-    // Bulk update
-    if (body.agents) {
-      for (const [name, data] of Object.entries(body.agents)) {
-        const agentName = name.toLowerCase();
-        if (currentStatus.agents[agentName]) {
-          currentStatus.agents[agentName] = data as { status: 'idle' | 'working' | 'complete'; task: string | null };
-        }
-      }
+
+    // Bulk update: { agents: { trader: { status: "working" }, ... } }
+    if (body.agents && typeof body.agents === 'object') {
+      const state = await updateMultipleAgents(body.agents);
+      return NextResponse.json({ success: true, ...state });
     }
-    
-    // Update memory store
-    currentStatus.agents.noctis.status = 'working'; // Noctis always active
-    currentStatus.lastUpdated = new Date().toISOString();
-    memoryStore = currentStatus;
-    
-    return NextResponse.json({ success: true, ...currentStatus });
+
+    // Add new agent: { newAgent: "custom-agent" }
+    if (body.newAgent) {
+      const state = await addAgent(body.newAgent, body.initialState);
+      return NextResponse.json({ success: true, ...state });
+    }
+
+    return NextResponse.json(
+      { error: 'Invalid request body' },
+      { status: 400 }
+    );
   } catch (error) {
     console.error('Failed to update agent status:', error);
-    return NextResponse.json({ error: 'Failed to update status' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update status' },
+      { status: 500 }
+    );
   }
 }
 
-// PUT - Reset all agents to idle (except Noctis)
+// PUT - Reset all agents to idle
 export async function PUT() {
-  const resetStatus: AgentStatusData = {
-    agents: {
-      noctis: { status: 'working', task: null },
-      aurora: { status: 'idle', task: null },
-      sage: { status: 'idle', task: null },
-      ada: { status: 'idle', task: null },
-      nova: { status: 'idle', task: null },
-    },
-    lastUpdated: new Date().toISOString(),
-  };
-  memoryStore = resetStatus;
-  return NextResponse.json({ success: true, ...resetStatus });
+  try {
+    const state = await resetSwarm();
+    return NextResponse.json({ success: true, ...state });
+  } catch (error) {
+    console.error('Failed to reset swarm:', error);
+    return NextResponse.json(
+      { error: 'Failed to reset swarm' },
+      { status: 500 }
+    );
+  }
 }
