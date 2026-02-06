@@ -43,13 +43,12 @@ Create an improved, detailed image generation prompt that addresses the feedback
   return text;
 }
 
-// Generate image using Nano Banana Pro via Gateway
+// Generate image using Nano Banana Pro (Gemini 3 Pro Image) via Gateway
 async function generateNewImage(prompt: string): Promise<string | null> {
   try {
     const { images } = await generateImage({
-      model: gateway.image('nano-banana-pro'),
+      model: gateway.image('google/gemini-3-pro-image'),
       prompt,
-      size: '1024x1024',
       n: 1,
     });
 
