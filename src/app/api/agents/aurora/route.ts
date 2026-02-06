@@ -52,11 +52,11 @@ async function generateNewImage(prompt: string): Promise<string | null> {
       n: 1,
     });
 
-    // Return the first image URL or base64
+    // Return the first image as base64 data URL
     if (images && images.length > 0) {
-      return images[0].base64
-        ? `data:image/png;base64,${images[0].base64}`
-        : images[0].url || null;
+      const image = images[0];
+      const mediaType = image.mediaType || 'image/png';
+      return `data:${mediaType};base64,${image.base64}`;
     }
     return null;
   } catch (error) {
