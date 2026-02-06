@@ -3,20 +3,14 @@
  *
  * Processes image feedback and generates new images using:
  * - Claude Sonnet (via Vercel AI Gateway) for analyzing feedback
- * - Nano Banana Pro (via Vercel AI Gateway) for image generation
+ * - Image generation model (via Vercel AI Gateway) for image generation
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateText, generateImage } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
+import { gateway } from '@ai-sdk/gateway';
 import { updateAgentStatus } from '@/lib/agent-store';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-
-// Vercel AI Gateway - provides access to all models
-const gateway = createOpenAI({
-  baseURL: 'https://gateway.ai.vercel.com/v1',
-  apiKey: process.env.VERCEL_AI_GATEWAY_SECRET || '',
-});
 
 interface AuroraTask {
   postId: string;
@@ -43,11 +37,12 @@ Create an improved, detailed image generation prompt that addresses the feedback
   return text;
 }
 
-// Generate image using Nano Banana Pro (Gemini 3 Pro Image) via Gateway
+// Generate image using Gemini or Imagen via Gateway
 async function generateNewImage(prompt: string): Promise<string | null> {
   try {
+    // Use gateway.image() for image generation models
     const { images } = await generateImage({
-      model: gateway.image('google/gemini-3-pro-image'),
+      model: gateway.image('google/imagen-4.0-generate-001'),
       prompt,
       n: 1,
     });
@@ -104,15 +99,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Feedback required' }, { status: 400 });
     }
 
-    // Check if AI Gateway is configured
-    if (!process.env.VERCEL_AI_GATEWAY_SECRET) {
-      console.error('🌸 Aurora: VERCEL_AI_GATEWAY_SECRET not configured');
+    // Check if AI Gateway is configured (support both env var names)
+    const apiKey = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_AI_GATEWAY_SECRET;
+    if (!apiKey) {
+      console.error('🌸 Aurora: AI Gateway API key not configured');
       await updateAgentStatus('aurora', {
         status: 'error',
         task: 'AI Gateway not configured',
-        error: 'Missing VERCEL_AI_GATEWAY_SECRET',
+        error: 'Missing AI_GATEWAY_API_KEY',
       });
       return NextResponse.json({ error: 'AI Gateway not configured' }, { status: 500 });
+    }
+
+    // Set the env var for the gateway SDK if using legacy name
+    if (!process.env.AI_GATEWAY_API_KEY && process.env.VERCEL_AI_GATEWAY_SECRET) {
+      process.env.AI_GATEWAY_API_KEY = process.env.VERCEL_AI_GATEWAY_SECRET;
     }
 
     // Update Aurora status to working

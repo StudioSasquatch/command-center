@@ -9,7 +9,8 @@ import { isSupabaseConfigured } from '@/lib/supabase';
 export async function GET() {
   const config = {
     supabaseConfigured: isSupabaseConfigured(),
-    hasAiGatewaySecret: !!process.env.VERCEL_AI_GATEWAY_SECRET,
+    hasAiGatewayApiKey: !!(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_AI_GATEWAY_SECRET),
+    aiGatewayKeySource: process.env.AI_GATEWAY_API_KEY ? 'AI_GATEWAY_API_KEY' : (process.env.VERCEL_AI_GATEWAY_SECRET ? 'VERCEL_AI_GATEWAY_SECRET' : 'none'),
     hasVercelUrl: !!process.env.VERCEL_URL,
     vercelUrl: process.env.VERCEL_URL || 'not set',
     hasBaseUrl: !!process.env.NEXT_PUBLIC_BASE_URL,
