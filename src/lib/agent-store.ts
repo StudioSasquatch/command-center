@@ -1,16 +1,11 @@
 /**
  * Agent Status Store
  *
- * Persistent storage for agent statuses with multiple backend support:
- * - Vercel KV (production, requires @vercel/kv package)
- * - File-based (local development fallback)
- * - In-memory (last resort fallback)
- *
- * Also handles real-time subscribers for SSE updates.
+ * Persistent storage for agent statuses using Supabase.
+ * Falls back to in-memory for development without Supabase.
  */
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { supabase, isSupabaseConfigured } from './supabase';
 
 // Types
 export type AgentStatus = 'idle' | 'working' | 'complete' | 'error';
@@ -40,133 +35,88 @@ export const SWARM_AGENTS = [
 ] as const;
 
 // Default state
-const DEFAULT_STATE: SwarmState = {
-  agents: Object.fromEntries(
-    SWARM_AGENTS.map(id => [
-      id,
-      {
-        status: id === 'noctis' ? 'working' : 'idle',
-        task: id === 'noctis' ? 'Orchestrating swarm' : null,
-        lastUpdate: new Date().toISOString(),
-      },
-    ])
-  ),
-  lastUpdated: new Date().toISOString(),
-  version: 1,
-};
+function createDefaultState(): SwarmState {
+  return {
+    agents: Object.fromEntries(
+      SWARM_AGENTS.map(id => [
+        id,
+        {
+          status: id === 'noctis' ? 'working' : 'idle',
+          task: id === 'noctis' ? 'Orchestrating swarm' : null,
+          lastUpdate: new Date().toISOString(),
+        },
+      ])
+    ),
+    lastUpdated: new Date().toISOString(),
+    version: 1,
+  };
+}
 
-// File path for local storage
-const STATUS_FILE = path.join(process.cwd(), 'data', 'agent-status.json');
-
-// In-memory cache
+// In-memory cache (used for quick reads and as fallback)
 let memoryCache: SwarmState | null = null;
-let cacheVersion = 0;
-
-// SSE subscribers for real-time updates
-type Subscriber = (state: SwarmState) => void;
-const subscribers = new Set<Subscriber>();
-
-/**
- * Subscribe to real-time status updates
- */
-export function subscribe(callback: Subscriber): () => void {
-  subscribers.add(callback);
-  return () => subscribers.delete(callback);
-}
-
-/**
- * Notify all subscribers of state change
- */
-function notifySubscribers(state: SwarmState) {
-  subscribers.forEach(cb => {
-    try {
-      cb(state);
-    } catch (e) {
-      console.error('Subscriber error:', e);
-    }
-  });
-}
-
-/**
- * Try to use Vercel KV if available
- */
-async function tryVercelKV(): Promise<{ get: (key: string) => Promise<SwarmState | null>, set: (key: string, value: SwarmState) => Promise<void> } | null> {
-  try {
-    // Dynamic import to avoid errors if not installed
-    const { kv } = await import('@vercel/kv');
-    return {
-      get: async (key: string) => await kv.get<SwarmState>(key),
-      set: async (key: string, value: SwarmState) => { await kv.set(key, value); }
-    };
-  } catch {
-    return null;
-  }
-}
 
 /**
  * Get current swarm state
  */
 export async function getSwarmState(): Promise<SwarmState> {
-  // Return cache if fresh (within 1 second)
-  if (memoryCache && cacheVersion > 0) {
-    return memoryCache;
-  }
+  // Try Supabase first
+  if (isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('agent_status')
+        .select('*')
+        .order('updated_at', { ascending: false });
 
-  // Try Vercel KV first
-  const kv = await tryVercelKV();
-  if (kv) {
-    const state = await kv.get('swarm-state');
-    if (state) {
-      memoryCache = state;
-      cacheVersion++;
-      return state;
+      if (!error && data && data.length > 0) {
+        // Build state from database rows
+        const agents: Record<string, AgentState> = {};
+        let latestUpdate = '';
+
+        for (const row of data) {
+          agents[row.agent_id] = {
+            status: row.status || 'idle',
+            task: row.task,
+            progress: row.progress,
+            lastUpdate: row.updated_at,
+            error: row.error,
+          };
+          if (!latestUpdate || row.updated_at > latestUpdate) {
+            latestUpdate = row.updated_at;
+          }
+        }
+
+        // Fill in missing default agents
+        for (const agentId of SWARM_AGENTS) {
+          if (!agents[agentId]) {
+            agents[agentId] = {
+              status: agentId === 'noctis' ? 'working' : 'idle',
+              task: agentId === 'noctis' ? 'Orchestrating swarm' : null,
+              lastUpdate: new Date().toISOString(),
+            };
+          }
+        }
+
+        const state: SwarmState = {
+          agents,
+          lastUpdated: latestUpdate || new Date().toISOString(),
+          version: data.length,
+        };
+
+        memoryCache = state;
+        return state;
+      }
+    } catch (e) {
+      console.error('Supabase read error:', e);
     }
   }
 
-  // Try file-based storage
-  try {
-    const data = await fs.readFile(STATUS_FILE, 'utf-8');
-    const state = JSON.parse(data) as SwarmState;
-    memoryCache = state;
-    cacheVersion++;
-    return state;
-  } catch {
-    // File doesn't exist or is invalid
+  // Return memory cache or default
+  if (memoryCache) {
+    return memoryCache;
   }
 
-  // Return default state
-  memoryCache = { ...DEFAULT_STATE, lastUpdated: new Date().toISOString() };
+  memoryCache = createDefaultState();
   return memoryCache;
-}
-
-/**
- * Save swarm state
- */
-async function saveSwarmState(state: SwarmState): Promise<void> {
-  state.lastUpdated = new Date().toISOString();
-  state.version = (state.version || 0) + 1;
-
-  memoryCache = state;
-  cacheVersion++;
-
-  // Try Vercel KV first
-  const kv = await tryVercelKV();
-  if (kv) {
-    await kv.set('swarm-state', state);
-    notifySubscribers(state);
-    return;
-  }
-
-  // Fall back to file storage
-  try {
-    const dir = path.dirname(STATUS_FILE);
-    await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(STATUS_FILE, JSON.stringify(state, null, 2));
-  } catch (e) {
-    console.error('Failed to save state to file:', e);
-  }
-
-  notifySubscribers(state);
 }
 
 /**
@@ -176,32 +126,54 @@ export async function updateAgentStatus(
   agentId: string,
   update: Partial<AgentState>
 ): Promise<SwarmState> {
-  const state = await getSwarmState();
-
   const normalizedId = agentId.toLowerCase();
+  const now = new Date().toISOString();
 
-  // Create agent if doesn't exist
+  // Update Supabase
+  if (isSupabaseConfigured()) {
+    try {
+      const { error } = await supabase
+        .from('agent_status')
+        .upsert({
+          agent_id: normalizedId,
+          status: update.status,
+          task: update.task,
+          progress: update.progress,
+          error: update.error,
+          updated_at: now,
+        }, {
+          onConflict: 'agent_id',
+        });
+
+      if (error) {
+        console.error('Supabase upsert error:', error);
+      }
+    } catch (e) {
+      console.error('Failed to update Supabase:', e);
+    }
+  }
+
+  // Update memory cache
+  const state = memoryCache || createDefaultState();
+
   if (!state.agents[normalizedId]) {
     state.agents[normalizedId] = {
       status: 'idle',
       task: null,
-      lastUpdate: new Date().toISOString(),
+      lastUpdate: now,
     };
   }
 
-  // Update agent state
   state.agents[normalizedId] = {
     ...state.agents[normalizedId],
     ...update,
-    lastUpdate: new Date().toISOString(),
+    lastUpdate: now,
   };
 
-  // Noctis is always working (orchestrator)
-  if (normalizedId !== 'noctis') {
-    state.agents.noctis.status = 'working';
-  }
+  state.lastUpdated = now;
+  state.version = (state.version || 0) + 1;
+  memoryCache = state;
 
-  await saveSwarmState(state);
   return state;
 }
 
@@ -211,7 +183,34 @@ export async function updateAgentStatus(
 export async function updateMultipleAgents(
   updates: Record<string, Partial<AgentState>>
 ): Promise<SwarmState> {
-  const state = await getSwarmState();
+  const now = new Date().toISOString();
+
+  // Update Supabase
+  if (isSupabaseConfigured()) {
+    try {
+      const rows = Object.entries(updates).map(([agentId, update]) => ({
+        agent_id: agentId.toLowerCase(),
+        status: update.status,
+        task: update.task,
+        progress: update.progress,
+        error: update.error,
+        updated_at: now,
+      }));
+
+      const { error } = await supabase
+        .from('agent_status')
+        .upsert(rows, { onConflict: 'agent_id' });
+
+      if (error) {
+        console.error('Supabase batch upsert error:', error);
+      }
+    } catch (e) {
+      console.error('Failed to batch update Supabase:', e);
+    }
+  }
+
+  // Update memory cache
+  const state = memoryCache || createDefaultState();
 
   for (const [agentId, update] of Object.entries(updates)) {
     const normalizedId = agentId.toLowerCase();
@@ -220,21 +219,21 @@ export async function updateMultipleAgents(
       state.agents[normalizedId] = {
         status: 'idle',
         task: null,
-        lastUpdate: new Date().toISOString(),
+        lastUpdate: now,
       };
     }
 
     state.agents[normalizedId] = {
       ...state.agents[normalizedId],
       ...update,
-      lastUpdate: new Date().toISOString(),
+      lastUpdate: now,
     };
   }
 
-  // Noctis always working
-  state.agents.noctis.status = 'working';
+  state.lastUpdated = now;
+  state.version = (state.version || 0) + 1;
+  memoryCache = state;
 
-  await saveSwarmState(state);
   return state;
 }
 
@@ -242,20 +241,30 @@ export async function updateMultipleAgents(
  * Reset all agents to idle (except Noctis)
  */
 export async function resetSwarm(): Promise<SwarmState> {
-  const state = await getSwarmState();
+  const now = new Date().toISOString();
 
-  for (const agentId of Object.keys(state.agents)) {
-    if (agentId !== 'noctis') {
-      state.agents[agentId] = {
-        status: 'idle',
-        task: null,
-        lastUpdate: new Date().toISOString(),
-      };
+  // Reset in Supabase
+  if (isSupabaseConfigured()) {
+    try {
+      const rows = SWARM_AGENTS.map(agentId => ({
+        agent_id: agentId,
+        status: agentId === 'noctis' ? 'working' : 'idle',
+        task: agentId === 'noctis' ? 'Orchestrating swarm' : null,
+        progress: null,
+        error: null,
+        updated_at: now,
+      }));
+
+      await supabase
+        .from('agent_status')
+        .upsert(rows, { onConflict: 'agent_id' });
+    } catch (e) {
+      console.error('Failed to reset swarm in Supabase:', e);
     }
   }
 
-  await saveSwarmState(state);
-  return state;
+  memoryCache = createDefaultState();
+  return memoryCache;
 }
 
 /**
@@ -265,23 +274,21 @@ export async function addAgent(
   agentId: string,
   initialState?: Partial<AgentState>
 ): Promise<SwarmState> {
-  const state = await getSwarmState();
-  const normalizedId = agentId.toLowerCase();
-
-  state.agents[normalizedId] = {
+  return updateAgentStatus(agentId, {
     status: 'idle',
     task: null,
-    lastUpdate: new Date().toISOString(),
     ...initialState,
-  };
-
-  await saveSwarmState(state);
-  return state;
+  });
 }
 
 /**
- * Get subscriber count (for monitoring)
+ * Get subscriber count (for monitoring) - no longer used with Supabase
  */
 export function getSubscriberCount(): number {
-  return subscribers.size;
+  return 0;
+}
+
+// Legacy subscribe function - kept for compatibility but no-op
+export function subscribe(): () => void {
+  return () => {};
 }
