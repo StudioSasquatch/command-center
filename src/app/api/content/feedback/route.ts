@@ -32,10 +32,15 @@ async function dispatchToAgent(
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
                     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
+    console.log(`📤 Dispatching to ${agent} at ${baseUrl}`);
+
     // For Aurora, call her execution endpoint directly
     if (agent === 'aurora') {
+      const auroraUrl = `${baseUrl}/api/agents/aurora`;
+      console.log(`🌸 Calling Aurora at: ${auroraUrl}`);
+
       // Fire and forget - don't await so the feedback API returns quickly
-      fetch(`${baseUrl}/api/agents/aurora`, {
+      fetch(auroraUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -44,7 +49,9 @@ async function dispatchToAgent(
           originalPrompt: context?.mediaNote,
           postText: context?.postText,
         }),
-      }).catch(err => console.error('Aurora execution error:', err));
+      })
+        .then(res => console.log(`🌸 Aurora response status: ${res.status}`))
+        .catch(err => console.error('🌸 Aurora execution error:', err));
     } else {
       // For other agents, just update their status (placeholder)
       await fetch(`${baseUrl}/api/agents?dispatch=true`, {
@@ -102,8 +109,12 @@ export async function POST(request: Request) {
 
     // Determine which agent to dispatch to
     let dispatchedTo: string | undefined;
-    if (isImageFeedback(message)) {
+    const isImage = isImageFeedback(message);
+    console.log(`📝 Feedback received - isImageFeedback: ${isImage}, message: "${message.substring(0, 50)}..."`);
+
+    if (isImage) {
       dispatchedTo = 'aurora';
+      console.log('🌸 Dispatching to Aurora for image feedback');
       // Dispatch to Aurora with full context for image regeneration
       await dispatchToAgent('aurora', message, {
         postId,

@@ -92,15 +92,31 @@ async function resolveFeedback(postId: string): Promise<void> {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('🌸 Aurora agent called');
+
   try {
     const body = await request.json();
     const { postId, feedback, originalPrompt, postText } = body;
+
+    console.log('🌸 Aurora received:', { postId, feedback: feedback?.substring(0, 50) });
 
     if (!feedback) {
       return NextResponse.json({ error: 'Feedback required' }, { status: 400 });
     }
 
+    // Check if AI Gateway is configured
+    if (!process.env.VERCEL_AI_GATEWAY_SECRET) {
+      console.error('🌸 Aurora: VERCEL_AI_GATEWAY_SECRET not configured');
+      await updateAgentStatus('aurora', {
+        status: 'error',
+        task: 'AI Gateway not configured',
+        error: 'Missing VERCEL_AI_GATEWAY_SECRET',
+      });
+      return NextResponse.json({ error: 'AI Gateway not configured' }, { status: 500 });
+    }
+
     // Update Aurora status to working
+    console.log('🌸 Aurora: Updating status to working');
     await updateAgentStatus('aurora', {
       status: 'working',
       task: `Processing: "${feedback.substring(0, 50)}..."`,
@@ -158,20 +174,16 @@ export async function POST(request: NextRequest) {
       await resolveFeedback(postId);
     }
 
-    // Complete
+    // Complete - status stays as complete (client can poll and see it)
+    console.log('🌸 Aurora: Task complete!');
     await updateAgentStatus('aurora', {
       status: 'complete',
       task: 'Image regenerated!',
       progress: 100,
     });
 
-    // Reset to idle after 5 seconds
-    setTimeout(async () => {
-      await updateAgentStatus('aurora', {
-        status: 'idle',
-        task: null,
-      });
-    }, 5000);
+    // Note: Can't use setTimeout in serverless - status will stay "complete"
+    // until next task or manual reset
 
     return NextResponse.json({
       success: true,
