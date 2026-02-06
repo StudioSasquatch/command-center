@@ -7,7 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { generateText, experimental_generateImage as generateImage } from 'ai';
+import { generateText, generateImage } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { updateAgentStatus } from '@/lib/agent-store';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
