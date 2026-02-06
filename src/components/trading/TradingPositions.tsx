@@ -26,6 +26,15 @@ interface TradingPositionsProps {
   isConnected: boolean;
 }
 
+interface StrategyConfig {
+  takeProfit: number;
+  stopLoss: number;
+  display: {
+    takeProfit: string;
+    stopLoss: string;
+  };
+}
+
 // Demo positions for when not connected
 const demoPositions: Position[] = [
   {
@@ -77,8 +86,12 @@ const demoPositions: Position[] = [
 export function TradingPositions({ isConnected }: TradingPositionsProps) {
   const [positions, setPositions] = useState<Position[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [strategy, setStrategy] = useState<StrategyConfig | null>(null);
 
   useEffect(() => {
+    // Fetch strategy config
+    fetchStrategy();
+
     if (isConnected) {
       fetchPositions();
     } else {
@@ -86,6 +99,16 @@ export function TradingPositions({ isConnected }: TradingPositionsProps) {
       setIsLoading(false);
     }
   }, [isConnected]);
+
+  const fetchStrategy = async () => {
+    try {
+      const res = await fetch('/api/trading/strategy');
+      const data = await res.json();
+      setStrategy(data);
+    } catch (error) {
+      console.error('Failed to fetch strategy:', error);
+    }
+  };
 
   const fetchPositions = async () => {
     try {
@@ -216,8 +239,8 @@ export function TradingPositions({ isConnected }: TradingPositionsProps) {
           <div className="flex items-center justify-between text-sm">
             <span className="text-[var(--text-muted)]">Exit Rules</span>
             <div className="flex items-center gap-4 font-mono text-xs">
-              <span className="text-[#00e676]">TP: +15%</span>
-              <span className="text-[#ff5252]">SL: -10%</span>
+              <span className="text-[#00e676]">TP: {strategy?.display.takeProfit || '+50%'}</span>
+              <span className="text-[#ff5252]">SL: {strategy?.display.stopLoss || '-40%'}</span>
             </div>
           </div>
         </div>

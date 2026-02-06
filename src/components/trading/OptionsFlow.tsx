@@ -10,7 +10,7 @@ import {
   Clock,
   DollarSign
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface FlowSignal {
   id: string;
@@ -24,6 +24,19 @@ interface FlowSignal {
   tag?: string;
   timestamp: string;
   dte: number;
+}
+
+interface StrategyConfig {
+  minPremium: number;
+  minDTE: number;
+  maxDTE: number;
+  maxCostPerContract: number;
+  liquidTickers: string[];
+  display: {
+    minPremium: string;
+    dteRange: string;
+    maxCost: string;
+  };
 }
 
 // Demo signals
@@ -84,6 +97,21 @@ const demoSignals: FlowSignal[] = [
 
 export function OptionsFlow() {
   const [signals, setSignals] = useState<FlowSignal[]>(demoSignals);
+  const [strategy, setStrategy] = useState<StrategyConfig | null>(null);
+
+  useEffect(() => {
+    fetchStrategy();
+  }, []);
+
+  const fetchStrategy = async () => {
+    try {
+      const res = await fetch('/api/trading/strategy');
+      const data = await res.json();
+      setStrategy(data);
+    } catch (error) {
+      console.error('Failed to fetch strategy:', error);
+    }
+  };
 
   const formatPremium = (premium: number) => {
     if (premium >= 1000000) {
@@ -93,12 +121,16 @@ export function OptionsFlow() {
   };
 
   const isActionable = (signal: FlowSignal) => {
-    // Check if signal meets our criteria
-    const meetsExpiry = signal.dte >= 7 && signal.dte <= 35;
-    const meetsCost = signal.price * 100 <= 500;
-    const liquidTickers = ['SPY', 'QQQ', 'NVDA', 'TSLA', 'AAPL', 'AMD', 'META', 'MSFT', 'GOOGL'];
-    const meetsTicker = liquidTickers.includes(signal.symbol);
-    
+    // Check if signal meets our criteria from strategy config
+    const minDTE = strategy?.minDTE || 7;
+    const maxDTE = strategy?.maxDTE || 35;
+    const maxCost = strategy?.maxCostPerContract || 500;
+    const tickers = strategy?.liquidTickers || ['SPY', 'QQQ', 'NVDA', 'TSLA', 'AAPL', 'AMD', 'META', 'MSFT', 'GOOGL', 'AMZN'];
+
+    const meetsExpiry = signal.dte >= minDTE && signal.dte <= maxDTE;
+    const meetsCost = signal.price * 100 <= maxCost;
+    const meetsTicker = tickers.includes(signal.symbol);
+
     return meetsExpiry && meetsCost && meetsTicker;
   };
 
@@ -128,9 +160,9 @@ export function OptionsFlow() {
       {/* Criteria Legend */}
       <div className="flex flex-wrap items-center gap-3 mb-4 text-xs">
         <span className="text-[var(--text-muted)]">Filters:</span>
-        <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">≥$150K Premium</span>
-        <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">7-35 DTE</span>
-        <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">≤$500/contract</span>
+        <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">{strategy?.display.minPremium || '≥$150K'} Premium</span>
+        <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">{strategy?.display.dteRange || '7-35 days'}</span>
+        <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">{strategy?.display.maxCost || '≤$500/contract'}</span>
         <span className="px-2 py-0.5 rounded bg-white/5 text-white/70">Liquid Tickers</span>
       </div>
 
@@ -178,7 +210,9 @@ export function OptionsFlow() {
                   </td>
                   <td className="py-3">
                     <span className={`text-sm font-mono ${
-                      signal.dte >= 7 && signal.dte <= 35 ? 'text-[#00e676]' : 'text-[var(--text-muted)]'
+                      signal.dte >= (strategy?.minDTE || 7) && signal.dte <= (strategy?.maxDTE || 35)
+                        ? 'text-[#00e676]'
+                        : 'text-[var(--text-muted)]'
                     }`}>
                       {signal.dte}D
                     </span>
@@ -188,7 +222,7 @@ export function OptionsFlow() {
                   </td>
                   <td className="py-3">
                     <span className={`text-sm font-mono ${
-                      signal.price * 100 <= 500 ? 'text-[#00e676]' : 'text-[#ff5252]'
+                      signal.price * 100 <= (strategy?.maxCostPerContract || 500) ? 'text-[#00e676]' : 'text-[#ff5252]'
                     }`}>
                       ${(signal.price * 100).toFixed(0)}
                     </span>
@@ -214,7 +248,7 @@ export function OptionsFlow() {
                       </button>
                     ) : (
                       <span className="text-xs text-[var(--text-muted)] font-mono">
-                        {signal.dte > 35 ? 'TOO FAR' : signal.price * 100 > 500 ? 'TOO $$$' : '—'}
+                        {signal.dte > (strategy?.maxDTE || 35) ? 'TOO FAR' : signal.price * 100 > (strategy?.maxCostPerContract || 500) ? 'TOO $$$' : '—'}
                       </span>
                     )}
                   </td>

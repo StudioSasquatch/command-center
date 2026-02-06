@@ -8,9 +8,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateText, generateImage } from 'ai';
-import { gateway } from '@ai-sdk/gateway';
+import { createGateway } from '@ai-sdk/gateway';
 import { updateAgentStatus } from '@/lib/agent-store';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
+// Create gateway with explicit API key (supports both env var names)
+const gateway = createGateway({
+  apiKey: process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_AI_GATEWAY_SECRET,
+});
 
 interface AuroraTask {
   postId: string;
@@ -99,21 +104,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Feedback required' }, { status: 400 });
     }
 
-    // Check if AI Gateway is configured (support both env var names)
-    const apiKey = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_AI_GATEWAY_SECRET;
-    if (!apiKey) {
+    // Check if AI Gateway is configured
+    if (!process.env.AI_GATEWAY_API_KEY && !process.env.VERCEL_AI_GATEWAY_SECRET) {
       console.error('🌸 Aurora: AI Gateway API key not configured');
       await updateAgentStatus('aurora', {
         status: 'error',
         task: 'AI Gateway not configured',
-        error: 'Missing AI_GATEWAY_API_KEY',
+        error: 'Missing AI_GATEWAY_API_KEY or VERCEL_AI_GATEWAY_SECRET',
       });
       return NextResponse.json({ error: 'AI Gateway not configured' }, { status: 500 });
-    }
-
-    // Set the env var for the gateway SDK if using legacy name
-    if (!process.env.AI_GATEWAY_API_KEY && process.env.VERCEL_AI_GATEWAY_SECRET) {
-      process.env.AI_GATEWAY_API_KEY = process.env.VERCEL_AI_GATEWAY_SECRET;
     }
 
     // Update Aurora status to working
